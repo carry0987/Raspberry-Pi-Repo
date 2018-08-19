@@ -8,7 +8,7 @@ bash -c 'echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf'
 sysctl -p
 apt-get update
 apt-get dist-upgrade
-apt-get install zip vsftpd unzip wget vim screen
+apt-get install zip vsftpd unzip wget vim screen smartmontools
 wget -P /usr/local/bin https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-WiFi-Reconnect/wifi-reconnect.sh
 chmod +x /usr/local/bin/wifi-reconnect.sh
 echo '* * * * * root /usr/local/bin/wifi-reconnect.sh' >> /etc/crontab
