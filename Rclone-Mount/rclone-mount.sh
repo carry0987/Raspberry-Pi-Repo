@@ -2,7 +2,7 @@
 
 set -e
 
-read -p -r 'Please enter the path that you want to mount with>' mount
+read -p 'Please enter the path that you want to mount with>' mount
 if [ -z $mount ]; then
     mkdir -p $mount
     chmod a+rx $mount
