@@ -5,7 +5,6 @@ Wants=network-online.target
 
 [Service]
 User=root
-ExecStart=/usr/bin/rclone mount GD:/RPi /mnt/mount --allow-other --allow-non-empty --vfs-cache-mode writes
 Restart=on-abort
 
 [Install]
