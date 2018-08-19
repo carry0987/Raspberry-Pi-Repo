@@ -13,7 +13,7 @@ if [ -n $rclone ]; then
         if [ -n $mount ]; then
             mkdir -p $mount
             chmod 777 $mount
-            rclone mount $rclone':'$remote_path $mount --allow-other --allow-non-empty --vfs-cache-mode writes &
+            su pi -c "rclone mount $rclone':'$remote_path $mount --allow-other --allow-non-empty --vfs-cache-mode writes &"
         else
             echo 'The path of mount point should not be empty !'
             exit 0
