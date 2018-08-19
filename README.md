@@ -14,7 +14,7 @@ receiver = ["Receiver@gmail.com"]
 
 ## Auto WiFi Reconnect
 This script can auto reconnect WiFi when the WiFi down
-1. Use wget to download this script
+1. Use wget to download the script
 ```
 sudo wget -P /usr/local/bin https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-WiFi-Reconnect/wifi-reconnect.sh
 ```
@@ -29,13 +29,34 @@ sudo echo '* * * * * root /usr/local/bin/wifi-reconnect.sh' >> /etc/crontab
 
 ## HatH
 This script can setup HentaiAtHome in the background automatically
-1. Use wget to download this script
+1. Use wget to download the script
 ```
 sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/HatH/hath.sh
 ```
 2. Use sh to run it
 ```
 sudo sh hath.sh
+```
+
+## Rclone Mount
+This script can mount remote drive (recommend Google Drive) and make it auto mount at boot
+1. Use wget to download the script
+```
+sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Rclone-Mount/rclone-mount.sh
+```
+2. Use bash to run it
+```
+sudo bash rclone-mount.sh
+```
+
+If you want to remove rclone-mount
+1. Use wget to download the script
+```
+sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Rclone-Mount/delete-rclone-mount.sh
+```
+2. Use bash to run it
+```
+sudo bash delete-rclone-mount.sh
 ```
 
 ## Tools
