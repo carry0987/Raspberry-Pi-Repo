@@ -11,7 +11,6 @@ if [ -n $rclone ]; then
     if [ -n $remote_path ]; then
         read -p 'Please enter the path that you want to mount with>' mount
         if [ -n $mount ]; then
-            mkdir -p $mount
             chmod 777 $mount
             su pi -c "rclone mount $rclone':'$remote_path $mount --allow-other --allow-non-empty --vfs-cache-mode writes &"
         else
