@@ -6,10 +6,12 @@ echo '1) Download files (link)'
 echo '2) Download files (list)'
 echo '3) Count files'
 echo '4) Delete File Or Folder'
-echo '5) Get CPU Temperature'
-echo '6) Get Pi Voltage'
-echo '7) Update packages'
-echo '8) Exit'
+echo '5) Check Crontab status'
+echo '6) Upload file (rclone)'
+echo '7) Get CPU Temperature'
+echo '8) Get Pi Voltage'
+echo '9) Update packages'
+echo '10) Exit'
 read -p 'Which tool do you want to use ? ' tool
 
 #Detect tools
@@ -48,19 +50,27 @@ case $tool in
     fi
     ;;
   5)
-    vcgencmd measure_temp
+    /etc/init.d/cron status
     ;;
   6)
+    read -p 'Please enter the file which you want to upload' rclone_file
+    read -p 'Please enter the path that you want to save' remote_path
+    rclone copy -v --stats 1s $rclone_file $remote_path
+    ;;
+  7)
+    vcgencmd measure_temp
+    ;;
+  8)
     for id in core sdram_c sdram_i sdram_p ; do \
       echo -e "$id:\t$(vcgencmd measure_volts $id)" ; \
     done
     ;;
-  7)
+  9)
     apt-get update
     apt-get dist-upgrade
     apt-get clean
     ;;
-  8)
+  10)
     echo 'Exited'
     ;;
   *)
