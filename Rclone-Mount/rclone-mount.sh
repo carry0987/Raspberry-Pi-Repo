@@ -12,8 +12,8 @@ if [ -n $rclone ]; then
         read -p 'Please enter the path that you want to mount with>' mount
         if [ -n $mount ]; then
             mkdir -p $mount
-            chmod a+rx $mount
-            rclone mount "$rclone":"$remote_path" $mount --allow-other --allow-non-empty --vfs-cache-mode writes &
+            chmod 777 $mount
+            rclone mount $rclone':'$remote_path $mount --allow-other --allow-non-empty --vfs-cache-mode writes &
         else
             echo 'The path of mount point should not be empty !'
             exit 0
