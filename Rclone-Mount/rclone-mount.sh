@@ -3,11 +3,11 @@
 set -e
 
 read -p 'Please enter the path that you want to mount with>' mount
-if [ -z $mount ]; then
+if [ -n $mount ]; then
     mkdir -p $mount
     chmod a+rx $mount
     read -p 'Please enter the name of remote>' rclone
-    if [ -z $rclone ]; then
+    if [ -n $rclone ]; then
         rclone mount "$rclone": $mount --allow-other --allow-non-empty --vfs-cache-mode writes &
     else
         echo 'The name of remote should not be empty !'
