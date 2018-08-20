@@ -60,9 +60,10 @@ case $tool in
     su pi -c "rclone copy -v --stats 1s $upload_file $upload_path"
     ;;
   7)
-    read -p 'Please enter the file or directory which you want to move from>' move_from
-    read -p 'Please enter the path that you want to move to>' move_to
-    su pi -c "rclone move -v --stats 1s $move_from $move_to'/'$move_from"
+    read -p 'Please enter the name of remote>' rclone_name
+    read -p 'Please enter the file or directory which you want to move from> '$rclone_name':/' move_from
+    read -p 'Please enter the path that you want to move to> '$rclone_name':/' move_to
+    su pi -c "rclone move -v --stats 1s $rclone_name':/'$move_from $rclone_name':/'$move_to'/'$move_from"
     ;;
   8)
     read -p 'Please enter the file or directory which you want to delete>' delete_file_or_dir
