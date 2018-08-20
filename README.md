@@ -65,6 +65,10 @@ This script has these features
 -  Download files (list)
 -  Count files
 -  Delete File Or Folder
+-  Check Crontab status
+-  Rclone upload files
+-  Rclone move files
+-  Rclone delete files
 -  Get CPU Temperature
 -  Get Pi Voltage
 -  Update packages
