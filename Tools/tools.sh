@@ -7,11 +7,13 @@ echo '2) Download files (list)'
 echo '3) Count files'
 echo '4) Delete File Or Folder'
 echo '5) Check Crontab status'
-echo '6) Upload file (rclone)'
-echo '7) Get CPU Temperature'
-echo '8) Get Pi Voltage'
-echo '9) Update packages'
-echo '10) Exit'
+echo '6) Rclone upload files'
+echo '7) Rclone move files'
+echo '8) Rclone delete files'
+echo '9) Get CPU Temperature'
+echo '10) Get Pi Voltage'
+echo '11) Update packages'
+echo '12) Exit'
 read -p 'Which tool do you want to use ? ' tool
 
 #Detect tools
@@ -53,24 +55,33 @@ case $tool in
     /etc/init.d/cron status
     ;;
   6)
-    read -p 'Please enter the file which you want to upload' rclone_file
-    read -p 'Please enter the path that you want to save' remote_path
-    rclone copy -v --stats 1s $rclone_file $remote_path
+    read -p 'Please enter the file or directory which you want to upload>' upload_file
+    read -p 'Please enter the path that you want to save>' upload_path
+    su pi -c "rclone copy -v --stats 1s $upload_file $upload_path"
     ;;
   7)
-    vcgencmd measure_temp
+    read -p 'Please enter the file or directory which you want to move from>' move_from
+    read -p 'Please enter the path that you want to move to>' move_to
+    su pi -c "rclone move -v --stats 1s $move_from $move_to'/'$move_from"
     ;;
   8)
+    read -p 'Please enter the file or directory which you want to delete>' delete_file_or_dir
+    su pi -c "rclone delete -v --stats 1s $delete_file_or_dir"
+    ;;
+  9)
+    vcgencmd measure_temp
+    ;;
+  10)
     for id in core sdram_c sdram_i sdram_p ; do \
       echo -e "$id:\t$(vcgencmd measure_volts $id)" ; \
     done
     ;;
-  9)
+  11)
     apt-get update
     apt-get dist-upgrade
     apt-get clean
     ;;
-  10)
+  12)
     echo 'Exited'
     ;;
   *)

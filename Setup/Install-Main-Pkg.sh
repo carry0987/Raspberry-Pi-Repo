@@ -38,7 +38,7 @@ case $var in
     echo '* * * * * root /usr/bin/python3.5 /usr/local/bin/report-ip.py' >> /etc/crontab
     ;;
   [Nn])
-    echo 'Setting up rclone...'
+    echo 'Setting up...'
     ;;
   *)
     echo 'You can only choose Yes or No'
@@ -47,9 +47,8 @@ case $var in
 esac
 
 service cron restart
-curl https://rclone.org/install.sh | sudo bash
-echo 'Wait 10 seconds...'
-sleep 10
+echo 'Wait 5 seconds to reboot...'
+sleep 5
 reboot
 
 exit 0

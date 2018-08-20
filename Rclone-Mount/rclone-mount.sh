@@ -5,6 +5,10 @@ set -e
 #Install FUSE
 apt-get install fuse
 
+#Install Rclone
+curl https://rclone.org/install.sh | sudo bash
+su pi -c 'rclone config'
+
 read -p 'Please enter the name of remote>' rclone
 if [ -n $rclone ]; then
     read -p 'Please enter the path of remote, just leave blank if you want to mount whole remote drive>' remote_path
@@ -36,5 +40,5 @@ systemctl start rclone
 systemctl enable rclone
 systemctl status rclone
 echo 'Wait 5 seconds to reboot...'
-sleep 10
+sleep 5
 reboot
