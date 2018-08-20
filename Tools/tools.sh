@@ -63,7 +63,8 @@ case $tool in
     read -p 'Please enter the name of remote>' rclone_name
     read -p 'Please enter the file or directory which you want to move from> '$rclone_name':/' move_from
     read -p 'Please enter the path that you want to move to> '$rclone_name':/' move_to
-    su pi -c "rclone move -v --stats 1s $rclone_name':/'$move_from $rclone_name':/'$move_to'/'$move_from"
+    move_to_path=`basename $move_from`
+    su pi -c "rclone move -v --stats 1s $rclone_name:/$move_from $rclone_name:/$move_to/$move_to_path"
     ;;
   8)
     read -p 'Please enter the file or directory which you want to delete>' delete_file_or_dir
