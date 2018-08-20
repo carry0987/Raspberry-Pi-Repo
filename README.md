@@ -73,7 +73,11 @@ This script has these features
 -  Get Pi Voltage
 -  Update packages
 
-It can only run under **bash**
+1. Use wget to download the script
+```
+sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Tools/tools.sh
+```
+2. Use bash to run it
 ```
 sudo bash tools.sh
 ```
