@@ -13,7 +13,9 @@ echo '8) Rclone delete files'
 echo '9) Get CPU Temperature'
 echo '10) Get Pi Voltage'
 echo '11) Set TCP-BBR'
-echo '12) Exit'
+echo '12) Update Packages'
+echo '13) Update RPi kernal'
+echo '14) Exit'
 read -p 'Which tool do you want to use ? ' tool
 
 #Detect tools
@@ -109,6 +111,15 @@ case $tool in
     fi
     ;;
   12)
+    apt-get update
+    apt-get dist-upgrade
+    apt-get clean
+    ;;
+  13)
+    rpi-update
+    reboot
+    ;;
+  14)
     echo 'Exited'
     ;;
   *)
