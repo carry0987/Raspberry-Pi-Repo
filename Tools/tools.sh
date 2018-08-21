@@ -20,7 +20,7 @@ read -p 'Which tool do you want to use ? ' tool
 case $tool in
   1)
     read -p 'Please enter your link>' link
-    read -p 'Please enter the path that you want to save this file, or just leave blank if you want to save to current path>' download_path
+    read -e -p 'Please enter the path that you want to save this file, or just leave blank if you want to save to current path>' download_path
     if [ -z $download_path ]; then
         wget --content-disposition $link
     else
@@ -28,8 +28,8 @@ case $tool in
     fi
     ;;
   2)
-    read -p 'Please enter your path of link list>' link_list
-    read -p 'Please enter the path that you want to save this file, or just leave blank if you want to save to current path>' download_list_path
+    read -e -p 'Please enter your path of link list>' link_list
+    read -e -p 'Please enter the path that you want to save this file, or just leave blank if you want to save to current path>' download_list_path
     if [ -z $download_list_path ]; then
         wget --content-disposition -i $link_list
     else
@@ -37,11 +37,11 @@ case $tool in
     fi
     ;;
   3)
-    read -p 'Enter your path>' count_path
+    read -e -p 'Enter your path>' count_path
     find $count_path -type f |wc -l
     ;;
   4)
-    read -p 'Enter file or folder that you want to remove>' file_or_folder
+    read -e -p 'Enter file or folder that you want to remove>' file_or_folder
     read -p 'Do you really want to remove '$file_or_folder' ? [Y/N]' var
     if [[ $var =~ ^([Yy])+$ ]]; then
       rm -vRf $file_or_folder
@@ -55,8 +55,8 @@ case $tool in
     /etc/init.d/cron status
     ;;
   6)
-    read -p 'Please enter the file or directory which you want to upload>' upload_file
-    read -p 'Please enter the path that you want to save>' upload_path
+    read -e -p 'Please enter the file or directory which you want to upload>' upload_file
+    read -p 'Please enter the remote path that you want to save>' upload_path
     su pi -c "rclone copy -v --stats 1s $upload_file $upload_path"
     ;;
   7)
