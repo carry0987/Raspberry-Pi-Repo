@@ -12,7 +12,7 @@ echo '7) Rclone move files'
 echo '8) Rclone delete files'
 echo '9) Get CPU Temperature'
 echo '10) Get Pi Voltage'
-echo '11) Update packages'
+echo '11) Set TCP-BBR'
 echo '12) Exit'
 read -p 'Which tool do you want to use ? ' tool
 
@@ -79,9 +79,34 @@ case $tool in
     done
     ;;
   11)
-    apt-get update
-    apt-get dist-upgrade
-    apt-get clean
+    #Check if TCP-BBR has already setup
+    if [ `grep -c "net.core.default_qdisc=fq" /etc/sysctl.conf` -eq '1' ]; then
+        bbr_qdisc=1
+    else
+        bash -c 'echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf'
+        echo 'Successful setting net core'
+        bbr_qdisc=2
+    fi
+
+    if [ `grep -c "net.ipv4.tcp_congestion_control=bbr" /etc/sysctl.conf` -eq '1' ]; then
+        bbr_tcc=1
+    else
+        bash -c 'echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf'
+        echo 'Successful setting tcp congestion control'
+        bbr_tcc=2
+    fi
+
+    if [[ $bbr_qdisc -eq '1' && $bbr_tcc -eq '1' ]]; then
+        echo 'TCP-BBR has already setup !'
+    elif [[ $bbr_qdisc -eq '2' || $bbr_tcc -eq '2' ]]; then
+        echo '######################'
+        echo 'TCP-BBR'
+        echo '######################'
+        sysctl -p
+        sysctl net.ipv4.tcp_available_congestion_control
+    else
+        echo 'Failed to set up TCP-BBR'
+    fi
     ;;
   12)
     echo 'Exited'
