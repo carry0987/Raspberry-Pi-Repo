@@ -2,13 +2,43 @@
 
 set -e
 
+#Set Time & Date NTP
 timedatectl set-ntp yes
-bash -c 'echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf'
-bash -c 'echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf'
-sysctl -p
+
+#Check if TCP-BBR has already setup
+if [ `grep -c "net.core.default_qdisc=fq" /etc/sysctl.conf` -eq '1' ]; then
+    bbr_qdisc=1
+else
+    bash -c 'echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf'
+    echo 'Successful setting net core'
+    bbr_qdisc=2
+fi
+
+if [ `grep -c "net.ipv4.tcp_congestion_control=bbr" /etc/sysctl.conf` -eq '1' ]; then
+    bbr_tcc=1
+else
+    bash -c 'echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf'
+    echo 'Successful setting tcp congestion control'
+    bbr_tcc=2
+fi
+
+if [[ $bbr_qdisc -eq '1' && $bbr_tcc -eq '1' ]]; then
+    echo 'TCP-BBR has already setup !'
+elif [[ $bbr_qdisc -eq '2' || $bbr_tcc -eq '2' ]]; then
+    echo '######################'
+    echo 'TCP-BBR'
+    echo '######################'
+    sysctl -p
+    sysctl net.ipv4.tcp_available_congestion_control
+else
+    echo 'Failed to set up TCP-BBR'
+fi
+
+#Update package list
 apt-get update
 apt-get dist-upgrade
 apt-get install zip vsftpd unzip wget vim screen smartmontools
+apt-get clean
 wget -P /usr/local/bin https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-WiFi-Reconnect/wifi-reconnect.sh
 chmod +x /usr/local/bin/wifi-reconnect.sh
 echo '* * * * * root /usr/local/bin/wifi-reconnect.sh' >> /etc/crontab
