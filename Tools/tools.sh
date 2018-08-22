@@ -59,18 +59,23 @@ case $tool in
   6)
     read -e -p 'Please enter the file or directory which you want to upload>' upload_file
     read -p 'Please enter the remote path that you want to save>' upload_path
-    su pi -c "rclone copy -v --stats 1s $upload_file $upload_path"
+    prefix_file=${upload_file//\'/\'\"\'\"\'}
+    prefix_path=${upload_path//\'/\'\"\'\"\'}
+    su $USER -c "rclone copy -v --stats 1s '$prefix_file' '$prefix_path'"
     ;;
   7)
     read -p 'Please enter the name of remote>' rclone_name
     read -p 'Please enter the file or directory which you want to move from> '$rclone_name':/' move_from
     read -p 'Please enter the path that you want to move to> '$rclone_name':/' move_to
-    move_to_path=`basename $move_from`
-    su pi -c "rclone move -v --stats 1s $rclone_name:/$move_from $rclone_name:/$move_to/$move_to_path"
+    prefix_from=${move_from//\'/\'\"\'\"\'}
+    prefix_to=${move_to//\'/\'\"\'\"\'}
+    move_to_path=`basename $prefix_from`
+    su $USER -c "rclone move -v --stats 1s '$rclone_name:/$prefix_from' '$rclone_name:/$prefix_to/$move_to_path'"
     ;;
   8)
     read -p 'Please enter the file or directory which you want to delete>' delete_file_or_dir
-    su pi -c "rclone delete -v --stats 1s $delete_file_or_dir"
+    prefix_delete=${delete_file_or_dir//\'/\'\"\'\"\'}
+    su $USER -c "rclone delete -v --stats 1s '$prefix_delete'"
     ;;
   9)
     vcgencmd measure_temp
