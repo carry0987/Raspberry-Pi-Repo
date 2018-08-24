@@ -11,14 +11,15 @@ echo '6) Rclone upload files'
 echo '7) Rclone move files'
 echo '8) Rclone delete files'
 echo '9) Rclone upload type files'
-echo '10) Get CPU Temperature'
-echo '11) Get Pi Voltage'
-echo '12) Set TCP-BBR'
-echo '13) Update Packages'
-echo '14) Update RPi kernal'
-echo '15) Resource Monitor (Sort By CPU)'
-echo '16) Resource Monitor (Sort By Memory)'
-echo '17) Exit'
+echo '10) Rclone config file location'
+echo '11) Get CPU Temperature'
+echo '12) Get Pi Voltage'
+echo '13) Set TCP-BBR'
+echo '14) Update Packages'
+echo '15) Update RPi kernal'
+echo '16) Resource Monitor (Sort By CPU)'
+echo '17) Resource Monitor (Sort By Memory)'
+echo '18) Exit'
 read -p 'Which tool do you want to use ? ' tool
 
 #Detect tools
@@ -131,14 +132,23 @@ case $tool in
         fi
     ;;
     10)
-        vcgencmd measure_temp
+        check_user=$USER
+        if [ $check_user == 'root' ]; then
+            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
+            su $select_user -c  "rclone -h | grep 'Config file'"
+        else
+            su $USER -c "rclone -h | grep 'Config file'"
+        fi
     ;;
     11)
+        vcgencmd measure_temp
+    ;;
+    12)
         for id in core sdram_c sdram_i sdram_p ; do \
           echo -e "$id:\t$(vcgencmd measure_volts $id)" ; \
         done
     ;;
-    12)
+    13)
         #Check if TCP-BBR has already setup
         if [ `grep -c "net.core.default_qdisc=fq" /etc/sysctl.conf` -eq '1' ]; then
             bbr_qdisc=1
@@ -168,22 +178,22 @@ case $tool in
             echo 'Failed to set up TCP-BBR'
         fi
     ;;
-    13)
+    14)
         apt-get update
         apt-get dist-upgrade
         apt-get clean
     ;;
-    14)
+    15)
         rpi-update
         reboot
     ;;
-    15)
+    16)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head
     ;;
-    16)
+    17)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head
     ;;
-    17)
+    18)
         echo 'Exited'
     ;;
     *)
