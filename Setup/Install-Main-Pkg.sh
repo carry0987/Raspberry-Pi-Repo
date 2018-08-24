@@ -49,8 +49,11 @@ case $var in
   [Yy])
     echo 'Installing IP Auto Reporter...'
     wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip.py
-    read -p 'Please enter your email address> ' email
-    echo 'Sender is '$email
+    read -p 'Please enter this device name>' name
+    echo 'Name: ' $name
+    sed -i 's/sender = "RPi"/sender = "'${name}'"/g' /home/pi/report-ip.py
+    read -p 'Please enter sender email address> ' email
+    echo 'Sender email address is '$email
     sed -i 's/username = "Sender@gmail.com"/username = "'${email}'"/g' /home/pi/report-ip.py
     echo "If you don't have the App Password, please go here to get the password: \nhttps://security.google.com/settings/security/apppasswords"
     read -p 'Please enter your email password> ' password

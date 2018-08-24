@@ -20,11 +20,11 @@ username = "Sender@gmail.com"
 password = "Sender Password"
 sender = "RPi"
 receiver = ["Receiver@gmail.com"]
-subject_changed = "[RPi] IP CHANGED"
-subject_not_changed = "[RPi] IP INFO"
+subject_changed = sender+" IP CHANGED"
+subject_not_changed = sender+" IP INFO"
 
 # file_path config
-file_path = "/home/pi/last-ip.log"
+file_path = '/home/pi/last-ip.log'
 if not os.path.isfile(file_path):
     f = open('/home/pi/last-ip.log', 'w')
     f.close()
