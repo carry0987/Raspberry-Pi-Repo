@@ -63,7 +63,13 @@ case $tool in
         read -p 'Please enter the remote path that you want to save>' upload_path
         prefix_file=${upload_file//\'/\'\"\'\"\'}
         prefix_path=${upload_path//\'/\'\"\'\"\'}
-        su $USER -c "rclone copy -v --stats 1s '$prefix_file' '$prefix_path'"
+        check_user=$USER
+        if [ $check_user == 'root' ]; then
+            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
+            su $select_user -c  "rclone copy -v --stats 1s '$prefix_file' '$prefix_path'"
+        else
+            su $USER -c "rclone copy -v --stats 1s '$prefix_file' '$prefix_path'"
+        fi
     ;;
     7)
         read -p 'Please enter the name of remote>' rclone_name
@@ -72,12 +78,24 @@ case $tool in
         prefix_from=${move_from//\'/\'\"\'\"\'}
         prefix_to=${move_to//\'/\'\"\'\"\'}
         move_to_path=`basename $prefix_from`
-        su $USER -c "rclone move -v --stats 1s '$rclone_name:/$prefix_from' '$rclone_name:/$prefix_to/$move_to_path'"
+        check_user=$USER
+        if [ $check_user == 'root' ]; then
+            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
+            su $select_user -c "rclone move -v --stats 1s '$rclone_name:/$prefix_from' '$rclone_name:/$prefix_to/$move_to_path'"
+        else
+            su $USER -c "rclone move -v --stats 1s '$rclone_name:/$prefix_from' '$rclone_name:/$prefix_to/$move_to_path'"
+        fi
     ;;
     8)
         read -p 'Please enter the file or directory which you want to delete>' delete_file_or_dir
         prefix_delete=${delete_file_or_dir//\'/\'\"\'\"\'}
-        su $USER -c "rclone delete -v --stats 1s '$prefix_delete'"
+        check_user=$USER
+        if [ $check_user == 'root' ]; then
+            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
+            su $select_user -c "rclone delete -v --stats 1s '$prefix_delete'"
+        else
+            su $USER -c "rclone delete -v --stats 1s '$prefix_delete'"
+        fi
     ;;
     9)
         vcgencmd measure_temp
