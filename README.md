@@ -1,6 +1,11 @@
 # Raspberry-Pi-Repo
 The repository for Raspberry Pi
 
+## Download Scripts
+This script will download raspberry pi repo automatically
+```
+bash -c "$(curl https://carry0987.github.io/repo/)"
+```
 ## Auto Report IP
 This script will automatically send your current public ip to your email if your public ip have been changed.
 Please enter the email info here:
