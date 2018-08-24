@@ -10,14 +10,15 @@ echo '5) Check Crontab status'
 echo '6) Rclone upload files'
 echo '7) Rclone move files'
 echo '8) Rclone delete files'
-echo '9) Get CPU Temperature'
-echo '10) Get Pi Voltage'
-echo '11) Set TCP-BBR'
-echo '12) Update Packages'
-echo '13) Update RPi kernal'
-echo '14) Resource Monitor (Sort By CPU)'
-echo '15) Resource Monitor (Sort By Memory)'
-echo '16) Exit'
+echo '9) Rclone upload type files'
+echo '10) Get CPU Temperature'
+echo '11) Get Pi Voltage'
+echo '12) Set TCP-BBR'
+echo '13) Update Packages'
+echo '14) Update RPi kernal'
+echo '15) Resource Monitor (Sort By CPU)'
+echo '16) Resource Monitor (Sort By Memory)'
+echo '17) Exit'
 read -p 'Which tool do you want to use ? ' tool
 
 #Detect tools
@@ -98,14 +99,46 @@ case $tool in
         fi
     ;;
     9)
-        vcgencmd measure_temp
+        read -e -p 'Please enter the path that you want to upload>' type_path
+        file_path=${type_path%/}
+        read -p 'Please enter the type of files that you want to upload>'$file_path'/' file_type
+        mkdir -p $file_path'/''EHT_'$file_type
+        mv $file_path'/'*.$file_type $file_path'/''EHT_'$file_type
+        read -p 'Do you want to upload all '$file_path'/'$file_type' files to remote drive? [Y/N] ' remote
+        if [[ $remote =~ ^([Yy])+$ ]]; then
+            read -p 'Please enter the remote path that you want to save>' upload_path
+            prefix_path=${upload_path//\'/\'\"\'\"\'}
+            check_user=$USER
+            if [ $check_user == 'root' ]; then
+                read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
+                su $select_user -c  "rclone copy -v --stats 1s $file_path/EHT_$file_type '$prefix_path'"
+            else
+                su $USER -c "rclone copy -v --stats 1s $file_path/EHT_$file_type '$prefix_path'"
+            fi
+            echo 'Upload Finished !'
+            read -p 'Do you want to remove '$file_path'/'$file_type' files from local? [Y/N] ' remove_dir
+            if [[ $remove_dir =~ ^([Yy])+$ ]]; then
+              rm -vRf $file_path'/''EHT_'$file_type
+            elif [[ $remove_dir =~ ^([Nn])+$ ]]; then
+              exit 0
+            else
+              echo 'You can only choose yes or no'
+            fi
+        elif [[ $remote =~ ^([Nn])+$ ]]; then
+          exit 0
+        else
+          echo 'You can only choose yes or no'
+        fi
     ;;
     10)
+        vcgencmd measure_temp
+    ;;
+    11)
         for id in core sdram_c sdram_i sdram_p ; do \
           echo -e "$id:\t$(vcgencmd measure_volts $id)" ; \
         done
     ;;
-    11)
+    12)
         #Check if TCP-BBR has already setup
         if [ `grep -c "net.core.default_qdisc=fq" /etc/sysctl.conf` -eq '1' ]; then
             bbr_qdisc=1
@@ -135,22 +168,22 @@ case $tool in
             echo 'Failed to set up TCP-BBR'
         fi
     ;;
-    12)
+    13)
         apt-get update
         apt-get dist-upgrade
         apt-get clean
     ;;
-    13)
+    14)
         rpi-update
         reboot
     ;;
-    14)
+    15)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head
     ;;
-    15)
+    16)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head
     ;;
-    16)
+    17)
         echo 'Exited'
     ;;
     *)
