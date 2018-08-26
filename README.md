@@ -1,6 +1,20 @@
 # Raspberry-Pi-Repo
 The repository for Raspberry Pi
 
+<details>
+    <summary>
+        <strong>Table of Contents</strong>
+    </summary>
+    <ul>
+        <li><a href="#download-scripts">Download Scripts</a></li>
+        <li><a href="#auto-report-ip">Auto Report IP</a></li>
+        <li><a href="#auto-wifi-reconnect">Auto WiFi Reconnect</a></li>
+        <li><a href="#hath">HatH</a></li>
+        <li><a href="#rclone-mount">Rclone Mount</a></li>
+        <li><a href="#tools">Tools</a></li>
+    </ul>
+</details>
+
 ## Download Scripts
 This script will download raspberry pi repo automatically
 ```
