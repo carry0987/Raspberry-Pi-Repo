@@ -80,17 +80,26 @@ sudo bash delete-rclone-mount.sh
 
 ## Tools
 This script has these features
--  Download files (link)
--  Download files (list)
--  Count files
--  Delete File Or Folder
--  Check Crontab status
--  Rclone upload files
--  Rclone move files
--  Rclone delete files
--  Get CPU Temperature
--  Get Pi Voltage
--  Update packages
+```
+1. Download files (link)
+2. Download files (list)
+3. Count files
+4. Delete File Or Folder
+5. Check Crontab status
+6. Rclone upload files
+7. Rclone move files
+8. Rclone delete files
+9. Rclone upload type files
+10. Rclone config file location
+11. Get CPU Temperature
+12. Get Pi Voltage
+13. Set TCP-BBR
+14. Update Packages
+15. Update RPi kernal
+16. Resource Monitor (Sort By CPU)
+17. Resource Monitor (Sort By Memory)
+18. Exit
+```
 
 1. Use wget to download the script
 ```
