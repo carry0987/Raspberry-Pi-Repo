@@ -32,7 +32,7 @@ case $tool in
         else
             wget -P $download_path --content-disposition $link
         fi
-    ;;
+        ;;
     2)
         read -e -p 'Please enter your path of link list>' link_list
         read -e -p 'Please enter the path that you want to save this file, or just leave blank if you want to save to current path>' download_list_path
@@ -41,11 +41,11 @@ case $tool in
         else
             wget -P $download_list_path --content-disposition -i $link_list
         fi
-    ;;
+        ;;
     3)
         read -e -p 'Enter your path>' count_path
         find $count_path -type f |wc -l
-    ;;
+        ;;
     4)
         read -e -p 'Enter file or folder that you want to remove>' file_or_folder
         read -p 'Do you really want to remove '$file_or_folder' ? [Y/N]' var
@@ -56,10 +56,10 @@ case $tool in
         else
           echo 'You can only choose yes or no'
         fi
-    ;;
+        ;;
     5)
         /etc/init.d/cron status
-    ;;
+        ;;
     6)
         read -e -p 'Please enter the file or directory which you want to upload>' upload_file
         read -p 'Please enter the remote path that you want to save>' upload_path
@@ -72,7 +72,7 @@ case $tool in
         else
             su $USER -c "rclone copy -v --stats 1s '$prefix_file' '$prefix_path'"
         fi
-    ;;
+        ;;
     7)
         read -p 'Please enter the name of remote>' rclone_name
         read -p 'Please enter the file or directory which you want to move from> '$rclone_name':/' move_from
@@ -87,7 +87,7 @@ case $tool in
         else
             su $USER -c "rclone move -v --stats 1s '$rclone_name:/$prefix_from' '$rclone_name:/$prefix_to/$move_to_path'"
         fi
-    ;;
+        ;;
     8)
         read -p 'Please enter the file or directory which you want to delete>' delete_file_or_dir
         prefix_delete=${delete_file_or_dir//\'/\'\"\'\"\'}
@@ -98,7 +98,7 @@ case $tool in
         else
             su $USER -c "rclone delete -v --stats 1s '$prefix_delete'"
         fi
-    ;;
+        ;;
     9)
         read -e -p 'Please enter the path that you want to upload>' type_path
         file_path=${type_path%/}
@@ -130,7 +130,7 @@ case $tool in
         else
           echo 'You can only choose yes or no'
         fi
-    ;;
+        ;;
     10)
         check_user=$USER
         if [ $check_user == 'root' ]; then
@@ -139,15 +139,15 @@ case $tool in
         else
             su $USER -c "rclone -h | grep 'Config file'"
         fi
-    ;;
+        ;;
     11)
         vcgencmd measure_temp
-    ;;
+        ;;
     12)
         for id in core sdram_c sdram_i sdram_p ; do \
           echo -e "$id:\t$(vcgencmd measure_volts $id)" ; \
         done
-    ;;
+        ;;
     13)
         #Check if TCP-BBR has already setup
         if [ `grep -c "net.core.default_qdisc=fq" /etc/sysctl.conf` -eq '1' ]; then
@@ -177,28 +177,28 @@ case $tool in
         else
             echo 'Failed to set up TCP-BBR'
         fi
-    ;;
+        ;;
     14)
         apt-get update
         apt-get dist-upgrade
         apt-get clean
-    ;;
+        ;;
     15)
         rpi-update
         reboot
-    ;;
+        ;;
     16)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head
-    ;;
+        ;;
     17)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head
-    ;;
+        ;;
     18)
         echo 'Exited'
-    ;;
+        ;;
     *)
         echo 'Tools not supported'
-    ;;
+        ;;
 esac
 
 exit 0

@@ -58,7 +58,7 @@ case $var in
         wget -P /usr/local/bin https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-WiFi-Reconnect/wifi-reconnect.sh
         chmod +x /usr/local/bin/wifi-reconnect.sh
         echo '* * * * * root /usr/local/bin/wifi-reconnect.sh' >> /etc/crontab
-    ;;
+        ;;
     2)
         echo 'Installing IP Auto Reporter...'
         wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip.py
@@ -83,15 +83,15 @@ case $var in
         systemctl start report-ip
         systemctl status report-ip
         echo '* * * * * root /usr/bin/python3.5 /usr/local/bin/report-ip.py' >> /etc/crontab
-    ;;
+        ;;
     3)
         echo 'Exited'
         exit 0
-    ;;
+        ;;
     *)
         echo 'You can only choose Yes or No'
         exit 0
-    ;;
+        ;;
 esac
 
 echo 'Setting up...'

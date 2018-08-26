@@ -33,10 +33,10 @@ case $detect in
         do
             zip -r $target_path/"${i%/}.zip" "$i";
         done
-    ;;
+        ;;
     [Nn])
         exit 0
-    ;;
+        ;;
 esac
 
 exit 0
