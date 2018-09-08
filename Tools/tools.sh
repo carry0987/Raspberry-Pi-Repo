@@ -100,8 +100,13 @@ case $tool in
         fi
         ;;
     9)
-        read -e -p 'Please enter the path that you want to upload>' type_path
-        file_path=${type_path%/}
+        script_path="$(cd "$(dirname "$0")"; pwd -P)"
+        read -e -p 'Please enter the path that you want to upload, or leave blank if you want to save in '$script_path'>' type_path
+        if [ -z $type_path ]; then
+            file_path=${script_path%/}
+        else
+            file_path=${type_path%/}
+        fi
         read -p 'Please enter the type of files that you want to upload>'$file_path'/' file_type
         mkdir -p $file_path'/''EHT_'$file_type
         mv $file_path'/'*.$file_type $file_path'/''EHT_'$file_type
