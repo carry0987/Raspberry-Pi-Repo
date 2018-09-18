@@ -19,7 +19,7 @@ esac
 secs=$((5))
 while [ $secs -gt 0 ]
 do
-    echo -ne 'Wait '"$secs\033[0K"' seconds to reboot'
+    echo -ne 'Wait '"$secs\033[0K"' seconds to reboot'"\r"
     sleep 1
     : $((secs--))
 done
