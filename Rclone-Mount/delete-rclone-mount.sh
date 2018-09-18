@@ -9,11 +9,18 @@ case $detect in
         systemctl stop rclone
         systemctl disable rclone
         rm /etc/systemd/system/rclone.service
-        rm -Rf /home/pi/gdrive
         ;;
     [Nn])
         exit 0
         ;;
 esac
 
+#Reboot
+secs=$((5))
+while [ $secs -gt 0 ]
+do
+    echo -ne 'Wait '"$secs\033[0K"' seconds to reboot'
+    sleep 1
+    : $((secs--))
+done
 reboot
