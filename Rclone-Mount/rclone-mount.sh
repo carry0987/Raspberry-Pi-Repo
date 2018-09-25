@@ -20,7 +20,7 @@ if [ -n $rclone ]; then
         read -e -p 'Please enter the path that you want to mount with>' mount
         if [ -n $mount ]; then
             chmod 777 $mount
-            su pi -c "rclone mount $rclone':'$remote_path $mount --allow-other --allow-non-empty --vfs-cache-mode writes &"
+            su pi -c "rclone mount $rclone':'$remote_path $mount --allow-non-empty --vfs-cache-mode writes &"
         else
             echo 'The path of mount point should not be empty !'
             exit 0
@@ -35,10 +35,10 @@ else
 fi
 
 #Make rclone auto mount at boot
-sed -i 's/#user_allow_other/user_allow_other/g' /etc/fuse.conf
+#sed -i 's/#user_allow_other/user_allow_other/g' /etc/fuse.conf
 wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Rclone-Mount/rclone.service
 mv -v rclone.service /etc/systemd/system
-sed '7 aExecStart=/usr/bin/rclone mount '${rclone}':'${remote_path}' '${mount}' --allow-other --allow-non-empty --vfs-cache-mode writes' -i /etc/systemd/system/rclone.service
+sed '7 aExecStart=/usr/bin/rclone mount '${rclone}':'${remote_path}' '${mount}' --allow-non-empty --vfs-cache-mode writes' -i /etc/systemd/system/rclone.service
 chmod 660 /etc/systemd/system/rclone.service
 systemctl daemon-reload
 systemctl start rclone
