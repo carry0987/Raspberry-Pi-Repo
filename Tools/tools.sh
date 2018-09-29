@@ -7,19 +7,21 @@ echo '2) Download files (list)'
 echo '3) Count files'
 echo '4) Delete File Or Folder'
 echo '5) Check Crontab status'
-echo '6) Rclone upload files'
+echo '6) Rclone copy files'
 echo '7) Rclone move files'
 echo '8) Rclone delete files'
 echo '9) Rclone upload type files'
-echo '10) Rclone config file location'
-echo '11) Get CPU Temperature'
-echo '12) Get Pi Voltage'
-echo '13) Set TCP-BBR'
-echo '14) Update Packages'
-echo '15) Update RPi kernal'
-echo '16) Resource Monitor (Sort By CPU)'
-echo '17) Resource Monitor (Sort By Memory)'
-echo '18) Exit'
+echo '10) Rclone sync remotes'
+echo '11) Rclone list remotes'
+echo '12) Rclone config file location'
+echo '13) Get CPU Temperature'
+echo '14) Get Pi Voltage'
+echo '15) Set TCP-BBR'
+echo '16) Update Packages'
+echo '17) Update RPi kernal'
+echo '18) Resource Monitor (Sort By CPU)'
+echo '19) Resource Monitor (Sort By Memory)'
+echo '20) Exit'
 read -p 'Which tool do you want to use ? ' tool
 
 #Detect tools
@@ -61,8 +63,8 @@ case $tool in
         /etc/init.d/cron status
         ;;
     6)
-        read -e -p 'Please enter the file or directory which you want to upload>' upload_file
-        read -p 'Please enter the remote path that you want to save>' upload_path
+        read -e -p 'Please enter the file or directory which you want to copy>' upload_file
+        read -e -p 'Please enter the target that you want to save>' upload_path
         prefix_file=${upload_file//\'/\'\"\'\"\'}
         prefix_path=${upload_path//\'/\'\"\'\"\'}
         check_user=$USER
@@ -137,6 +139,31 @@ case $tool in
         fi
         ;;
     10)
+        read -e -p 'Please enter the remote which you want to sync>' sync_from
+        read -e -p 'Please enter the target remote that you want to sync with '$sync_from'>' sync_to
+        prefix_sync_from=${sync_from//\'/\'\"\'\"\'}
+        prefix_sync_to=${sync_to//\'/\'\"\'\"\'}
+        check_user=$USER
+        if [ $check_user == 'root' ]; then
+            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
+            su $select_user -c  "rclone sync -v --stats 1s '$prefix_sync_from' '$prefix_sync_to'"
+        else
+            su $USER -c "rclone sync -v --stats 1s '$prefix_sync_from' '$prefix_sync_to'"
+        fi
+        ;;
+    11)
+        read -e -p 'Please enter the remote name which you want to list>' remote_list
+        read -e -p 'Please enter the level that you want rclone descend directories deep>' list_level
+        prefix_remote_list=${remote_list//\'/\'\"\'\"\'}
+        check_user=$USER
+        if [ $check_user == 'root' ]; then
+            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
+            su $select_user -c  "rclone tree -v --human --level $list_level --stats 1s $prefix_remote_list"
+        else
+            su $USER -c "rclone tree -v --human --level $list_level --stats 1s $prefix_remote_list"
+        fi
+        ;;
+    12)
         check_user=$USER
         if [ $check_user == 'root' ]; then
             read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
@@ -145,15 +172,15 @@ case $tool in
             su $USER -c "rclone -h | grep 'Config file'"
         fi
         ;;
-    11)
+    13)
         vcgencmd measure_temp
         ;;
-    12)
+    14)
         for id in core sdram_c sdram_i sdram_p ; do \
           echo -e "$id:\t$(vcgencmd measure_volts $id)" ; \
         done
         ;;
-    13)
+    15)
         #Check if TCP-BBR has already setup
         if [ `grep -c "net.core.default_qdisc=fq" /etc/sysctl.conf` -eq '1' ]; then
             bbr_qdisc=1
@@ -183,22 +210,29 @@ case $tool in
             echo 'Failed to set up TCP-BBR'
         fi
         ;;
-    14)
+    16)
         apt-get update
         apt-get dist-upgrade
         apt-get clean
         ;;
-    15)
+    17)
         rpi-update
+        secs=$((5))
+        while [ $secs -gt 0 ]
+        do
+            echo -ne 'Wait '"$secs\033[0K"' seconds to reboot'"\r"
+            sleep 1
+            : $((secs--))
+        done
         reboot
         ;;
-    16)
+    18)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head
         ;;
-    17)
+    19)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head
         ;;
-    18)
+    20)
         echo 'Exited'
         ;;
     *)
