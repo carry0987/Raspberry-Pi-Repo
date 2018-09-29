@@ -158,9 +158,9 @@ case $tool in
         check_user=$USER
         if [ $check_user == 'root' ]; then
             read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
-            su $select_user -c  "rclone tree -v --human --level $list_level --stats 1s $prefix_remote_list:"
+            su $select_user -c  "rclone tree -v --human --level $list_level $prefix_remote_list:"
         else
-            su $USER -c "rclone tree -v --human --level $list_level --stats 1s $prefix_remote_list:"
+            su $USER -c "rclone tree -v --human --level $list_level $prefix_remote_list:"
         fi
         ;;
     12)
