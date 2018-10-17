@@ -18,7 +18,7 @@ echo '13) Get CPU Temperature'
 echo '14) Get Pi Voltage'
 echo '15) Set TCP-BBR'
 echo '16) Update Packages'
-echo '17) Update RPi kernal'
+echo '17) Check RPi kernal version'
 echo '18) Resource Monitor (Sort By CPU)'
 echo '19) Resource Monitor (Sort By Memory)'
 echo '20) Exit'
@@ -216,15 +216,16 @@ case $tool in
         apt-get clean
         ;;
     17)
-        rpi-update
-        secs=$((5))
-        while [ $secs -gt 0 ]
-        do
-            echo -ne 'Wait '"$secs\033[0K"' seconds to reboot'"\r"
-            sleep 1
-            : $((secs--))
-        done
-        reboot
+        uname -a
+        #rpi-update
+        #secs=$((5))
+        #while [ $secs -gt 0 ]
+        #do
+        #    echo -ne 'Wait '"$secs\033[0K"' seconds to reboot'"\r"
+        #    sleep 1
+        #    : $((secs--))
+        #done
+        #reboot
         ;;
     18)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head

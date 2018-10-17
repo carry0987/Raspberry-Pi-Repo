@@ -1,0 +1,20 @@
+[Unit]
+Description=Deluged
+Documentation=man:deluged
+After=network-online.target media-hd.mount
+Requires=media-hd.mount
+Wants=network-online.target
+BindsTo=media-hd.mount
+
+[Service]
+#Type=simple
+#User=deluge
+#Group=deluge
+#UMask=007
+ExecStart=/usr/bin/deluged -d
+Restart=on-failure
+# Time to wait before forcefully stopped.
+TimeoutStopSec=300
+
+[Install]
+WantedBy=multi-user.target media-hd.mount
