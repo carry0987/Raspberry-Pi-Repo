@@ -86,19 +86,21 @@ This script has these features
 3. Count files
 4. Delete File Or Folder
 5. Check Crontab status
-6. Rclone upload files
+6. Rclone copy files
 7. Rclone move files
 8. Rclone delete files
 9. Rclone upload type files
-10. Rclone config file location
-11. Get CPU Temperature
-12. Get Pi Voltage
-13. Set TCP-BBR
-14. Update Packages
-15. Update RPi kernal
-16. Resource Monitor (Sort By CPU)
-17. Resource Monitor (Sort By Memory)
-18. Exit
+10. Rclone sync remotes
+11. Rclone list remotes
+12. Rclone config file location
+13. Get CPU Temperature
+14. Get Pi Voltage
+15. Set TCP-BBR
+16. Update Packages
+17. Check RPi kernal version
+18. Resource Monitor (Sort By CPU)
+19. Resource Monitor (Sort By Memory)
+20. Exit
 ```
 
 1. Use wget to download the script
