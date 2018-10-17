@@ -1,10 +1,10 @@
 [Unit]
 Description=Deluged
 Documentation=man:deluged
-After=network-online.target media-hd.mount
-Requires=media-hd.mount
+After=network-online.target drive.mount
+Requires=drive.mount
 Wants=network-online.target
-BindsTo=media-hd.mount
+BindsTo=drive.mount
 
 [Service]
 #Type=simple
@@ -17,4 +17,4 @@ Restart=on-failure
 TimeoutStopSec=300
 
 [Install]
-WantedBy=multi-user.target media-hd.mount
+WantedBy=multi-user.target drive.mount
