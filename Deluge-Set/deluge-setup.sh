@@ -25,7 +25,7 @@ read -p 'Please enter the password for '$set_user'>' deluge_pass
 
 #Check if deluge user has already setup
 if [ -e $script_path'/.config/deluge/auth' ]; then
-    if [ `grep -c "${set_user}':'${deluge_pass}':10'" /home/pi/.config/deluge/auth` -eq '1' ]; then
+    if [ `grep -c "${set_user}:${deluge_pass}:10" /home/pi/.config/deluge/auth` -eq '1' ]; then
         echo 'This user has already setup !'
     else
         echo ${set_user}':'${deluge_pass}':10' >> /home/pi/.config/deluge/auth
