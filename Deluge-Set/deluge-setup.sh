@@ -33,6 +33,17 @@ if [ -e '/home/pi/.config/deluge/auth' ]; then
     fi
 fi
 
+#Check if deluge stat file exist
+if [ -z '/home/pi/.config/deluge/torrents.state' ]; then
+        echo 'Make up stat file...'
+        sudo touch /home/pi/.config/deluge/torrents.state
+fi
+
+if [ -z '/home/pi/.config/deluge/torrents.state.bak' ]; then
+        echo 'Make up stat.bak file...'
+        sudo touch /home/pi/.config/deluge/torrents.state.bak
+fi
+
 #Setting Deluge
 check_user=$USER
 if [ $check_user == 'root' ]; then
@@ -60,7 +71,7 @@ if [ $check_user == 'root' ]; then
         su $select_user -c "deluge-console config -s download_location ${deluge_base}/${deluge_downloading%/}"
     fi
 
-    read -p 'Please enter the directory for completed files, or just leave blank if the path is '$deluge_base'/deluge/completed :'
+    echo 'Please enter the directory for completed files, or just leave blank if the path is '$deluge_base'/deluge/completed :'
     read -e -p '>'$deluge_base'/' deluge_completed
     if [ -z $deluge_completed ]; then
         sudo mkdir -p $deluge_base/deluge/completed
@@ -72,7 +83,7 @@ if [ $check_user == 'root' ]; then
         su $select_user -c "deluge-console config -s move_completed_path ${deluge_base}/${deluge_completed%/}"
     fi
 
-    read -p 'Please enter the directory for torrent-backups files, or just leave blank if the path is '$deluge_base'/deluge/torrent-backups :'
+    echo 'Please enter the directory for torrent-backups files, or just leave blank if the path is '$deluge_base'/deluge/torrent-backups :'
     read -e -p '>'$deluge_base'/' deluge_torrent_backups
     if [ -z $deluge_torrent_backups ]; then
         sudo mkdir -p $deluge_base/deluge/torrent-backups
@@ -84,7 +95,7 @@ if [ $check_user == 'root' ]; then
         su $select_user -c "deluge-console config -s torrentfiles_location ${deluge_base}/${deluge_torrent_backups%/}"
     fi
 
-    read -p 'Please enter the directory for auto-add-torrent files, or just leave blank if the path is '$deluge_base'/deluge/watch :'
+    echo 'Please enter the directory for auto-add-torrent files, or just leave blank if the path is '$deluge_base'/deluge/watch :'
     read -e -p '>'$deluge_base'/' deluge_watch
     if [ -z $deluge_watch ]; then
         sudo mkdir -p $deluge_base/deluge/watch
@@ -121,7 +132,7 @@ else
         su $USER -c "deluge-console config -s download_location ${deluge_base}/${deluge_downloading%/}"
     fi
 
-    read -p 'Please enter the directory for completed files, or just leave blank if the path is '$deluge_base'/deluge/completed :'
+    echo 'Please enter the directory for completed files, or just leave blank if the path is '$deluge_base'/deluge/completed :'
     read -e -p '>'$deluge_base'/' deluge_completed
     if [ -z $deluge_completed ]; then
         sudo mkdir -p $deluge_base/deluge/completed
@@ -133,7 +144,7 @@ else
         su $USER -c "deluge-console config -s move_completed_path ${deluge_base}/${deluge_completed%/}"
     fi
 
-    read -p 'Please enter the directory for torrent-backups files, or just leave blank if the path is '$deluge_base'/deluge/torrent-backups :'
+    echo 'Please enter the directory for torrent-backups files, or just leave blank if the path is '$deluge_base'/deluge/torrent-backups :'
     read -e -p '>'$deluge_base'/' deluge_torrent_backups
     if [ -z $deluge_torrent_backups ]; then
         sudo mkdir -p $deluge_base/deluge/torrent-backups
@@ -145,7 +156,7 @@ else
         su $USER -c "deluge-console config -s torrentfiles_location ${deluge_base}/${deluge_torrent_backups%/}"
     fi
 
-    read -p 'Please enter the directory for auto-add-torrent files, or just leave blank if the path is '$deluge_base'/deluge/watch :'
+    echo 'Please enter the directory for auto-add-torrent files, or just leave blank if the path is '$deluge_base'/deluge/watch :'
     read -e -p '>'$deluge_base'/' deluge_watch
     if [ -z $deluge_watch ]; then
         sudo mkdir -p $deluge_base/deluge/watch
