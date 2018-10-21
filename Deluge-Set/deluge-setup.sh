@@ -34,14 +34,14 @@ if [ -e '/home/pi/.config/deluge/auth' ]; then
 fi
 
 #Check if deluge stat file exist
-if [ -z '/home/pi/.config/deluge/torrents.state' ]; then
+if [ -z '/home/pi/.config/deluge/state/torrents.state' ]; then
         echo 'Make up stat file...'
-        sudo touch /home/pi/.config/deluge/torrents.state
+        sudo touch /home/pi/.config/deluge/state/torrents.state
 fi
 
-if [ -z '/home/pi/.config/deluge/torrents.state.bak' ]; then
+if [ -z '/home/pi/.config/deluge/state/torrents.state.bak' ]; then
         echo 'Make up stat.bak file...'
-        sudo touch /home/pi/.config/deluge/torrents.state.bak
+        sudo touch /home/pi/.config/deluge/state/torrents.state.bak
 fi
 
 #Setting Deluge
