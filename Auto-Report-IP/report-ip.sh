@@ -36,13 +36,13 @@ then
     echo 'Successfully send the e-mail.'
 else
     echo 'IP not change.'
-    {
-        echo To: $email_to
-        echo From: $email_from
-        echo Subject: $subject_not_changed
-        echo $public_ip
-    } | ssmtp $email_to
-    echo 'Successfully send the e-mail.'
+#    {
+#        echo To: $email_to
+#        echo From: $email_from
+#        echo Subject: $subject_not_changed
+#        echo $public_ip
+#    } | ssmtp $email_to
+#    echo 'Successfully send the e-mail.'
 fi
 
 exit 0

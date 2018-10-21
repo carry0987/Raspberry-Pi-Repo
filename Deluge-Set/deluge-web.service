@@ -6,7 +6,7 @@ Wants=network-online.target deluged.service
 
 [Service]
 #Type=simple
-#User=deluge
+User=pi
 #Group=deluge
 #UMask=027
 # This 5 second delay is necessary on some systems

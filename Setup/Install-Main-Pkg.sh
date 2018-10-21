@@ -82,7 +82,7 @@ case $var in
         wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip.sh
         read -p 'Please enter this device name>' name
         echo 'Name: ' $name
-        sed -i 's/sender=\[HatH\]/sender=\['${name}'\]/g' /home/pi/report-ip.sh
+        sed -i 's/sender=\[HatH\]/sender='${name}'/g' /home/pi/report-ip.sh
         read -p 'Please enter sender email address> ' email
         echo 'Sender email address is '$email
         sed -i 's/email_from='\'Sender@gmail.com\''/email_from='\'${email}\''/g' /home/pi/report-ip.sh
