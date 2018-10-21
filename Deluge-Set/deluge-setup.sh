@@ -38,12 +38,6 @@ check_user=$USER
 if [ $check_user == 'root' ]; then
     read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
     su $select_user -c "deluged"
-else
-    su $USER -c "deluged"
-fi
-
-if [ $check_user == 'root' ]; then
-    read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
     su $select_user -c "deluge-console config -s allow_remote True"
     su $select_user -c "deluge-console config allow_remote"
     #Set Deluge download path
@@ -59,11 +53,11 @@ if [ $check_user == 'root' ]; then
     if [ -z $deluge_downloading ]; then
         sudo mkdir -p $deluge_base/deluge/downloading
         echo 'Setting up download location to '${deluge_base}'/deluge/downloading'
-        su $select_user -c "deluge-console config -s download_location: ${deluge_base}/deluge/downloading"
+        su $select_user -c "deluge-console config -s download_location ${deluge_base}/deluge/downloading"
     else
         sudo mkdir -p $deluge_base/${deluge_downloading%/}
         echo 'Setting up download location to '${deluge_base}'/'${deluge_downloading%/}
-        su $select_user -c "deluge-console config -s download_location: ${deluge_base}/${deluge_downloading%/}"
+        su $select_user -c "deluge-console config -s download_location ${deluge_base}/${deluge_downloading%/}"
     fi
 
     read -p 'Please enter the directory for completed files, or just leave blank if the path is '$deluge_base'/deluge/completed :'
@@ -71,11 +65,11 @@ if [ $check_user == 'root' ]; then
     if [ -z $deluge_completed ]; then
         sudo mkdir -p $deluge_base/deluge/completed
         echo 'Setting up completed location to '${deluge_base}'/deluge/completed'
-        su $select_user -c "deluge-console config -s move_completed_path: ${deluge_base}/deluge/completed"
+        su $select_user -c "deluge-console config -s move_completed_path ${deluge_base}/deluge/completed"
     else
         sudo mkdir -p $deluge_base/${deluge_completed%/}
         echo 'Setting up completed location to '${deluge_base}'/'${deluge_completed%/}
-        su $select_user -c "deluge-console config -s move_completed_path: ${deluge_base}/${deluge_completed%/}"
+        su $select_user -c "deluge-console config -s move_completed_path ${deluge_base}/${deluge_completed%/}"
     fi
 
     read -p 'Please enter the directory for torrent-backups files, or just leave blank if the path is '$deluge_base'/deluge/torrent-backups :'
@@ -83,11 +77,11 @@ if [ $check_user == 'root' ]; then
     if [ -z $deluge_torrent_backups ]; then
         sudo mkdir -p $deluge_base/deluge/torrent-backups
         echo 'Setting up torrent-backups location to '${deluge_base}'/deluge/torrent-backups'
-        su $select_user -c "deluge-console config -s torrentfiles_location: ${deluge_base}/deluge/torrent-backups"
+        su $select_user -c "deluge-console config -s torrentfiles_location ${deluge_base}/deluge/torrent-backups"
     else
         sudo mkdir -p $deluge_base/${deluge_torrent_backups%/}
         echo 'Setting up torrent-backups location to '${deluge_base}'/'${deluge_torrent_backups%/}
-        su $select_user -c "deluge-console config -s torrentfiles_location: ${deluge_base}/${deluge_torrent_backups%/}"
+        su $select_user -c "deluge-console config -s torrentfiles_location ${deluge_base}/${deluge_torrent_backups%/}"
     fi
 
     read -p 'Please enter the directory for auto-add-torrent files, or just leave blank if the path is '$deluge_base'/deluge/watch :'
@@ -95,14 +89,15 @@ if [ $check_user == 'root' ]; then
     if [ -z $deluge_watch ]; then
         sudo mkdir -p $deluge_base/deluge/watch
         echo 'Setting up auto-add-torrent location to '${deluge_base}'/deluge/watch'
-        su $select_user -c "deluge-console config -s autoadd_location: ${deluge_base}/deluge/watch"
+        su $select_user -c "deluge-console config -s autoadd_location ${deluge_base}/deluge/watch"
     else
         sudo mkdir -p $deluge_base/${deluge_watch%/}
         echo 'Setting up auto-add-torrent location to '${deluge_base}'/'${deluge_watch%/}
-        su $select_user -c "deluge-console config -s autoadd_location: ${deluge_base}/${deluge_watch%/}"
+        su $select_user -c "deluge-console config -s autoadd_location ${deluge_base}/${deluge_watch%/}"
     fi
     su $select_user -c "deluge-console exit"
 else
+    su $USER -c "deluged"
     su $USER -c "deluge-console config -s allow_remote True"
     su $USER -c "deluge-console config allow_remote"
     su $USER -c "deluge-console exit"
@@ -119,11 +114,11 @@ else
     if [ -z $deluge_downloading ]; then
         sudo mkdir -p $deluge_base/deluge/downloading
         echo 'Setting up download location to '${deluge_base}'/deluge/downloading'
-        su $USER -c "deluge-console config -s download_location: ${deluge_base}/deluge/downloading"
+        su $USER -c "deluge-console config -s download_location ${deluge_base}/deluge/downloading"
     else
         sudo mkdir -p $deluge_base/${deluge_downloading%/}
         echo 'Setting up download location to '${deluge_base}'/'${deluge_downloading%/}
-        su $USER -c "deluge-console config -s download_location: ${deluge_base}/${deluge_downloading%/}"
+        su $USER -c "deluge-console config -s download_location ${deluge_base}/${deluge_downloading%/}"
     fi
 
     read -p 'Please enter the directory for completed files, or just leave blank if the path is '$deluge_base'/deluge/completed :'
@@ -131,11 +126,11 @@ else
     if [ -z $deluge_completed ]; then
         sudo mkdir -p $deluge_base/deluge/completed
         echo 'Setting up completed location to '${deluge_base}'/deluge/completed'
-        su $USER -c "deluge-console config -s move_completed_path: ${deluge_base}/deluge/completed"
+        su $USER -c "deluge-console config -s move_completed_path ${deluge_base}/deluge/completed"
     else
         sudo mkdir -p $deluge_base/${deluge_completed%/}
         echo 'Setting up completed location to '${deluge_base}'/'${deluge_completed%/}
-        su $USER -c "deluge-console config -s move_completed_path: ${deluge_base}/${deluge_completed%/}"
+        su $USER -c "deluge-console config -s move_completed_path ${deluge_base}/${deluge_completed%/}"
     fi
 
     read -p 'Please enter the directory for torrent-backups files, or just leave blank if the path is '$deluge_base'/deluge/torrent-backups :'
@@ -143,11 +138,11 @@ else
     if [ -z $deluge_torrent_backups ]; then
         sudo mkdir -p $deluge_base/deluge/torrent-backups
         echo 'Setting up torrent-backups location to '${deluge_base}'/deluge/torrent-backups'
-        su $USER -c "deluge-console config -s torrentfiles_location: ${deluge_base}/deluge/torrent-backups"
+        su $USER -c "deluge-console config -s torrentfiles_location ${deluge_base}/deluge/torrent-backups"
     else
         sudo mkdir -p $deluge_base/${deluge_torrent_backups%/}
         echo 'Setting up torrent-backups location to '${deluge_base}'/'${deluge_torrent_backups%/}
-        su $USER -c "deluge-console config -s torrentfiles_location: ${deluge_base}/${deluge_torrent_backups%/}"
+        su $USER -c "deluge-console config -s torrentfiles_location ${deluge_base}/${deluge_torrent_backups%/}"
     fi
 
     read -p 'Please enter the directory for auto-add-torrent files, or just leave blank if the path is '$deluge_base'/deluge/watch :'
@@ -155,11 +150,11 @@ else
     if [ -z $deluge_watch ]; then
         sudo mkdir -p $deluge_base/deluge/watch
         echo 'Setting up auto-add-torrent location to '${deluge_base}'/deluge/watch'
-        su $USER -c "deluge-console config -s autoadd_location: ${deluge_base}/deluge/watch"
+        su $USER -c "deluge-console config -s autoadd_location ${deluge_base}/deluge/watch"
     else
         sudo mkdir -p $deluge_base/${deluge_watch%/}
         echo 'Setting up auto-add-torrent location to '${deluge_base}'/'${deluge_watch%/}
-        su $USER -c "deluge-console config -s autoadd_location: ${deluge_base}/${deluge_watch%/}"
+        su $USER -c "deluge-console config -s autoadd_location ${deluge_base}/${deluge_watch%/}"
     fi
 fi
 
