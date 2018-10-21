@@ -161,16 +161,8 @@ fi
 if [ $check_user == 'root' ]; then
     read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
     su $select_user -c "pkill deluged"
-    sleep 3
-    su $select_user -c "deluge-web"
-    sleep 3
-    su $select_user -c "pkill deluge-web"
 else
     su $USER -c "pkill deluged"
-    sleep 3
-    su $USER -c "deluge-web"
-    sleep 3
-    su $USER -c "pkill deluge-web"
 fi
 
 #If you want to change deluge-web page, here is the index.html path :
