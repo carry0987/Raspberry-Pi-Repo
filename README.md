@@ -9,6 +9,7 @@ The repository for Raspberry Pi
         <li><a href="#download-scripts">Download Scripts</a></li>
         <li><a href="#auto-report-ip">Auto Report IP</a></li>
         <li><a href="#auto-wifi-reconnect">Auto WiFi Reconnect</a></li>
+        <li><a href="#deluge-set">Deluge-Set</a></li>
         <li><a href="#hath">HatH</a></li>
         <li><a href="#rclone-mount">Rclone Mount</a></li>
         <li><a href="#tools">Tools</a></li>
@@ -44,6 +45,17 @@ sudo chmod +x /usr/local/bin/wifi-reconnect.sh
 3. Edit crontab to let it check WiFi connection every minute
 ```
 sudo echo '* * * * * root /usr/local/bin/wifi-reconnect.sh' >> /etc/crontab
+```
+
+## Deluge-Set
+This script can setup Deluge & Deluge-Web
+1. Use wget to download the script
+```
+sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Deluge-Set/deluge-setup.sh
+```
+2. Use sh to run it
+```
+sudo sh deluge-setup.sh
 ```
 
 ## HatH
