@@ -7,7 +7,7 @@ Wants=network-online.target
 BindsTo=drive.mount
 
 [Service]
-#Type=simple
+Type=simple
 User=pi
 #Group=deluge
 #UMask=007

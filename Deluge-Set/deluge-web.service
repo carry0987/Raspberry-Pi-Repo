@@ -5,15 +5,14 @@ After=network-online.target deluged.service
 Wants=network-online.target deluged.service
 
 [Service]
-#Type=simple
+Type=simple
 User=pi
 #Group=deluge
 #UMask=027
 # This 5 second delay is necessary on some systems
 # to ensure deluged has been fully started
-ExecStartPre=/bin/sleep 5
-ExecStart=/usr/bin/deluge-web -l --fork /var/log/deluge/web.log -L warning
-#ExecStart=/usr/bin/deluge-web -l /var/log/deluge/web.log -L warning
+ExecStartPre=/bin/sleep 3
+ExecStart=/usr/bin/deluge-web --fork
 Restart=on-failure
 
 [Install]
