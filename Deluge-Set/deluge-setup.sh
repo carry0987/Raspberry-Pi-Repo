@@ -60,8 +60,11 @@ check_user=$USER
 if [ $check_user == 'root' ]; then
     read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
     su $select_user -c "deluged"
+    echo 'Waiting for deluge start....'
+    sleep 3
     su $select_user -c "deluge-console config -s allow_remote True"
     su $select_user -c "deluge-console config allow_remote"
+    su $select_user -c "deluge-console config -s max_upload_slots_global 15"
     #Set Deluge download path
     read -e -p 'Please enter deluge base path, or just leave blank if the path is /media/hd>' set_deluge_base
     if [ -z $set_deluge_base ]; then
