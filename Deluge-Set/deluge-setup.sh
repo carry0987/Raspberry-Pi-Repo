@@ -65,6 +65,9 @@ if [ $check_user == 'root' ]; then
     su $select_user -c "deluge-console config -s allow_remote True"
     su $select_user -c "deluge-console config allow_remote"
     su $select_user -c "deluge-console config -s max_upload_slots_global 15"
+    su $select_user -c "deluge-console config -s max_active_limit 18"
+    su $select_user -c "deluge-console config -s max_active_downloading 15"
+    su $select_user -c "deluge-console config -s max_active_seeding 3"
     #Set Deluge download path
     read -e -p 'Please enter deluge base path, or just leave blank if the path is /media/hd>' set_deluge_base
     if [ -z $set_deluge_base ]; then
@@ -137,8 +140,14 @@ if [ $check_user == 'root' ]; then
     su $select_user -c "deluge-console exit"
 else
     su $USER -c "deluged"
+    echo 'Waiting for deluge start....'
+    sleep 3
     su $USER -c "deluge-console config -s allow_remote True"
     su $USER -c "deluge-console config allow_remote"
+    su $USER -c "deluge-console config -s max_upload_slots_global 15"
+    su $USER -c "deluge-console config -s max_active_limit 18"
+    su $USER -c "deluge-console config -s max_active_downloading 15"
+    su $USER -c "deluge-console config -s max_active_seeding 3"
     su $USER -c "deluge-console exit"
     #Set Deluge download path
     read -e -p 'Please enter deluge base path, or just leave blank if the path is /media/hd>' set_deluge_base
