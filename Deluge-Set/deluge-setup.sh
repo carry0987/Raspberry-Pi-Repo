@@ -47,12 +47,12 @@ fi
 #Check if deluge conf file exist
 if [ -e '/home/pi/.config/deluge/core.conf' ]; then
         echo 'Make up core.conf file...'
-        sudo chmod a+rx /home/pi/.config/deluge/core.conf
+        sudo chmod 777 /home/pi/.config/deluge/core.conf
 fi
 
 if [ -e '/home/pi/.config/deluge/web.conf' ]; then
         echo 'Make up web.conf file...'
-        sudo chmod a+rx /home/pi/.config/deluge/web.conf
+        sudo chmod 777 /home/pi/.config/deluge/web.conf
 fi
 
 #Setting Deluge
@@ -77,10 +77,12 @@ if [ $check_user == 'root' ]; then
     read -e -p '>'$deluge_base'/' deluge_downloading
     if [ -z $deluge_downloading ]; then
         sudo mkdir -p $deluge_base/deluge/downloading
+        sudo chmod 777 $deluge_base/deluge/downloading
         echo 'Setting up download location to '${deluge_base}'/deluge/downloading'
         su $select_user -c "deluge-console config -s download_location ${deluge_base}/deluge/downloading"
     else
         sudo mkdir -p $deluge_base/${deluge_downloading%/}
+        sudo chmod 777 $deluge_base/${deluge_downloading%/}
         echo 'Setting up download location to '${deluge_base}'/'${deluge_downloading%/}
         su $select_user -c "deluge-console config -s download_location ${deluge_base}/${deluge_downloading%/}"
     fi
@@ -89,11 +91,13 @@ if [ $check_user == 'root' ]; then
     read -e -p '>'$deluge_base'/' deluge_completed
     if [ -z $deluge_completed ]; then
         sudo mkdir -p $deluge_base/deluge/completed
+        sudo chmod 777 $deluge_base/deluge/completed
         echo 'Setting up completed location to '${deluge_base}'/deluge/completed'
         su $select_user -c "deluge-console config -s move_completed_path ${deluge_base}/deluge/completed"
         su $select_user -c "deluge-console config -s move_completed True"
     else
         sudo mkdir -p $deluge_base/${deluge_completed%/}
+        sudo chmod 777 $deluge_base/${deluge_completed%/}
         echo 'Setting up completed location to '${deluge_base}'/'${deluge_completed%/}
         su $select_user -c "deluge-console config -s move_completed_path ${deluge_base}/${deluge_completed%/}"
         su $select_user -c "deluge-console config -s move_completed True"
@@ -103,11 +107,13 @@ if [ $check_user == 'root' ]; then
     read -e -p '>'$deluge_base'/' deluge_torrent_backups
     if [ -z $deluge_torrent_backups ]; then
         sudo mkdir -p $deluge_base/deluge/torrent-backups
+        sudo chmod 777 $deluge_base/deluge/torrent-backups
         echo 'Setting up torrent-backups location to '${deluge_base}'/deluge/torrent-backups'
         su $select_user -c "deluge-console config -s torrentfiles_location ${deluge_base}/deluge/torrent-backups"
         su $select_user -c "deluge-console config -s copy_torrent_file True"
     else
         sudo mkdir -p $deluge_base/${deluge_torrent_backups%/}
+        sudo chmod 777 $deluge_base/${deluge_torrent_backups%/}
         echo 'Setting up torrent-backups location to '${deluge_base}'/'${deluge_torrent_backups%/}
         su $select_user -c "deluge-console config -s torrentfiles_location ${deluge_base}/${deluge_torrent_backups%/}"
         su $select_user -c "deluge-console config -s copy_torrent_file True"
@@ -117,11 +123,13 @@ if [ $check_user == 'root' ]; then
     read -e -p '>'$deluge_base'/' deluge_watch
     if [ -z $deluge_watch ]; then
         sudo mkdir -p $deluge_base/deluge/watch
+        sudo chmod 777 $deluge_base/deluge/watch
         echo 'Setting up auto-add-torrent location to '${deluge_base}'/deluge/watch'
         su $select_user -c "deluge-console config -s autoadd_location ${deluge_base}/deluge/watch"
         su $select_user -c "deluge-console config -s autoadd_enable True"
     else
         sudo mkdir -p $deluge_base/${deluge_watch%/}
+        sudo chmod 777 $deluge_base/${deluge_watch%/}
         echo 'Setting up auto-add-torrent location to '${deluge_base}'/'${deluge_watch%/}
         su $select_user -c "deluge-console config -s autoadd_location ${deluge_base}/${deluge_watch%/}"
         su $select_user -c "deluge-console config -s autoadd_enable True"
@@ -144,10 +152,12 @@ else
     read -e -p '>'$deluge_base'/' deluge_downloading
     if [ -z $deluge_downloading ]; then
         sudo mkdir -p $deluge_base/deluge/downloading
+        sudo chmod 777 $deluge_base/deluge/downloading
         echo 'Setting up download location to '${deluge_base}'/deluge/downloading'
         su $USER -c "deluge-console config -s download_location ${deluge_base}/deluge/downloading"
     else
         sudo mkdir -p $deluge_base/${deluge_downloading%/}
+        sudo chmod 777 $deluge_base/${deluge_downloading%/}
         echo 'Setting up download location to '${deluge_base}'/'${deluge_downloading%/}
         su $USER -c "deluge-console config -s download_location ${deluge_base}/${deluge_downloading%/}"
     fi
@@ -156,11 +166,13 @@ else
     read -e -p '>'$deluge_base'/' deluge_completed
     if [ -z $deluge_completed ]; then
         sudo mkdir -p $deluge_base/deluge/completed
+        sudo chmod 777 $deluge_base/deluge/completed
         echo 'Setting up completed location to '${deluge_base}'/deluge/completed'
         su $USER -c "deluge-console config -s move_completed_path ${deluge_base}/deluge/completed"
         su $USER -c "deluge-console config -s move_completed True"
     else
         sudo mkdir -p $deluge_base/${deluge_completed%/}
+        sudo chmod 777 $deluge_base/${deluge_completed%/}
         echo 'Setting up completed location to '${deluge_base}'/'${deluge_completed%/}
         su $USER -c "deluge-console config -s move_completed_path ${deluge_base}/${deluge_completed%/}"
         su $USER -c "deluge-console config -s move_completed True"
@@ -170,11 +182,13 @@ else
     read -e -p '>'$deluge_base'/' deluge_torrent_backups
     if [ -z $deluge_torrent_backups ]; then
         sudo mkdir -p $deluge_base/deluge/torrent-backups
+        sudo chmod 777 $deluge_base/deluge/torrent-backups
         echo 'Setting up torrent-backups location to '${deluge_base}'/deluge/torrent-backups'
         su $USER -c "deluge-console config -s torrentfiles_location ${deluge_base}/deluge/torrent-backups"
         su $USER -c "deluge-console config -s copy_torrent_file True"
     else
         sudo mkdir -p $deluge_base/${deluge_torrent_backups%/}
+        sudo chmod 777 $deluge_base/${deluge_torrent_backups%/}
         echo 'Setting up torrent-backups location to '${deluge_base}'/'${deluge_torrent_backups%/}
         su $USER -c "deluge-console config -s torrentfiles_location ${deluge_base}/${deluge_torrent_backups%/}"
         su $USER -c "deluge-console config -s copy_torrent_file True"
@@ -184,11 +198,13 @@ else
     read -e -p '>'$deluge_base'/' deluge_watch
     if [ -z $deluge_watch ]; then
         sudo mkdir -p $deluge_base/deluge/watch
+        sudo chmod 777 $deluge_base/deluge/watch
         echo 'Setting up auto-add-torrent location to '${deluge_base}'/deluge/watch'
         su $USER -c "deluge-console config -s autoadd_location ${deluge_base}/deluge/watch"
         su $USER -c "deluge-console config -s autoadd_enable True"
     else
         sudo mkdir -p $deluge_base/${deluge_watch%/}
+        sudo chmod 777 $deluge_base/${deluge_watch%/}
         echo 'Setting up auto-add-torrent location to '${deluge_base}'/'${deluge_watch%/}
         su $USER -c "deluge-console config -s autoadd_location ${deluge_base}/${deluge_watch%/}"
         su $USER -c "deluge-console config -s autoadd_enable True"
