@@ -15,24 +15,6 @@ if ! [ -x "$(command -v deluged)" ]; then
     sudo apt-get clean
 fi
 
-read -p 'Please enter the username that you allowed to use deluge, just leave blank if the user is pi>' deluge_user
-if [ -z $deluge_user ]; then
-    set_user=pi
-else
-    set_user=$deluge_user
-fi
-read -p 'Please enter the password for '$set_user'>' deluge_pass
-
-#Check if deluge user has already setup
-if [ -e '/home/pi/.config/deluge/auth' ]; then
-    if [ `grep -c "${set_user}:${deluge_pass}:10" /home/pi/.config/deluge/auth` -eq '1' ]; then
-        echo 'This user has already setup !'
-    else
-        echo ${set_user}':'${deluge_pass}':10' >> /home/pi/.config/deluge/auth
-        echo 'Successful setting Deluge User'
-    fi
-fi
-
 #Check if deluge stat file exist
 if [ -z '/home/pi/.config/deluge/state/torrents.state' ]; then
         echo 'Make up stat file...'
@@ -45,15 +27,15 @@ if [ -z '/home/pi/.config/deluge/state/torrents.state.bak' ]; then
 fi
 
 #Check if deluge conf file exist
-if [ -e '/home/pi/.config/deluge/core.conf' ]; then
-        echo 'Make up core.conf file...'
-        sudo chmod 777 /home/pi/.config/deluge/core.conf
-fi
-
-if [ -e '/home/pi/.config/deluge/web.conf' ]; then
-        echo 'Make up web.conf file...'
-        sudo chmod 777 /home/pi/.config/deluge/web.conf
-fi
+#if [ -e '/home/pi/.config/deluge/core.conf' ]; then
+#        echo 'Make up core.conf file...'
+#        sudo chmod 777 /home/pi/.config/deluge/core.conf
+#fi
+#
+#if [ -e '/home/pi/.config/deluge/web.conf' ]; then
+#        echo 'Make up web.conf file...'
+#        sudo chmod 777 /home/pi/.config/deluge/web.conf
+#fi
 
 #Setting Deluge
 check_user=$USER
@@ -62,6 +44,25 @@ if [ $check_user == 'root' ]; then
     su $select_user -c "deluged"
     echo 'Waiting for deluge start....'
     sleep 3
+    read -p 'Please enter the username that you allowed to use deluge, just leave blank if the user is pi>' deluge_user
+    if [ -z $deluge_user ]; then
+        set_user=pi
+    else
+        set_user=$deluge_user
+    fi
+
+    #Set deluge user
+    read -p 'Please enter the password for '$set_user'>' deluge_pass
+
+    #Check if deluge user has already setup
+    if [ -e '/home/pi/.config/deluge/auth' ]; then
+        if [ `grep -c "${set_user}:${deluge_pass}:10" /home/pi/.config/deluge/auth` -eq '1' ]; then
+            echo 'This user has already setup !'
+        else
+            echo ${set_user}':'${deluge_pass}':10' >> /home/pi/.config/deluge/auth
+            echo 'Successful setting Deluge User'
+        fi
+    fi
     su $select_user -c "deluge-console config -s allow_remote True"
     su $select_user -c "deluge-console config allow_remote"
     su $select_user -c "deluge-console config -s max_upload_slots_global 15"

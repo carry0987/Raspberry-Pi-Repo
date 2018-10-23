@@ -9,10 +9,10 @@ Type=simple
 User=pi
 #Group=deluge
 #UMask=027
-# This 5 second delay is necessary on some systems
+# This 3 second delay is necessary on some systems
 # to ensure deluged has been fully started
 ExecStartPre=/bin/sleep 3
-ExecStart=/usr/bin/deluge-web
+ExecStart=/usr/bin/deluge-web -l /home/pi/.config/deluge/web.log -L warning
 Restart=on-failure
 
 [Install]
