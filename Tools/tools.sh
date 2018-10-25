@@ -52,11 +52,11 @@ case $tool in
         read -e -p 'Enter file or folder that you want to remove>' file_or_folder
         read -p 'Do you really want to remove '$file_or_folder' ? [Y/N]' var
         if [[ $var =~ ^([Yy])+$ ]]; then
-          rm -vRf $file_or_folder
+            rm -vRf $file_or_folder
         elif [[ $var =~ ^([Nn])+$ ]]; then
-          bash tools.sh
+            bash tools.sh
         else
-          echo 'You can only choose yes or no'
+            echo 'You can only choose yes or no'
         fi
         ;;
     5)
@@ -65,16 +65,14 @@ case $tool in
     6)
         read -e -p 'Please enter the file or directory which you want to copy>' upload_file
         read -e -p 'Please enter the target that you want to save>' upload_path
-        prefix_quotation_file=${upload_file//\'/\'\"\'\"\'}
-        prefix_space_file=${prefix_quotation_file// /\\ }
-        prefix_quotation_path=${upload_path//\'/\'\"\'\"\'}
-        prefix_space_path=${prefix_quotation_path// /\\ }
+        prefix_file=${upload_file//\'/\'\"\'\"\'}
+        prefix_path=${upload_path//\'/\'\"\'\"\'}
         check_user=$USER
         if [ $check_user == 'root' ]; then
             read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
-            su $select_user -c  "rclone copy -v --stats 1s '$prefix_space_file' '$prefix_space_path'"
+            su $select_user -c  "rclone copy -v --stats 1s '$prefix_file' '$prefix_path'"
         else
-            su $USER -c "rclone copy -v --stats 1s '$prefix_space_file' '$prefix_space_path'"
+            su $USER -c "rclone copy -v --stats 1s '$prefix_file' '$prefix_path'"
         fi
         ;;
     7)
@@ -110,36 +108,35 @@ case $tool in
             file_path=${script_path%/}
         else
             file_path=${type_path%/}
-            file_space_path=${file_path// /\\ }
+            #file_space_path=${file_path// /\\ }
         fi
-        read -p 'Please enter the type of files that you want to upload>'$file_space_path'/' file_type
-        mkdir -p $file_space_path'/''EHT_'$file_type
-        mv $file_space_path'/'*.$file_type $file_space_path'/''EHT_'$file_type
-        read -p 'Do you want to upload all '$file_space_path'/'$file_type' files to remote drive? [Y/N] ' remote
+        read -p 'Please enter the type of files that you want to upload>'$file_path'/' file_type
+        mkdir -p $file_path'/''EHT_'$file_type
+        mv $file_path'/'*.$file_type $file_path'/''EHT_'$file_type
+        read -p 'Do you want to upload all '$file_path'/'$file_type' files to remote drive? [Y/N] ' remote
         if [[ $remote =~ ^([Yy])+$ ]]; then
             read -p 'Please enter the remote path that you want to save>' upload_path
-            prefix_quotation_path=${upload_path//\'/\'\"\'\"\'}
-            prefix_space_path=${prefix_quotation_path// /\\ }
+            prefix_path=${upload_path//\'/\'\"\'\"\'}
             check_user=$USER
             if [ $check_user == 'root' ]; then
                 read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
-                su $select_user -c  "rclone copy -v --stats 1s $file_space_path/EHT_$file_type '$prefix_space_path'"
+                su $select_user -c  "rclone copy -v --stats 1s $file_path/EHT_$file_type '$prefix_path'"
             else
-                su $USER -c "rclone copy -v --stats 1s $file_space_path/EHT_$file_type '$prefix_space_path'"
+                su $USER -c "rclone copy -v --stats 1s $file_path/EHT_$file_type '$prefix_path'"
             fi
             echo 'Upload Finished !'
-            read -p 'Do you want to remove '$file_space_path'/'$file_type' files from local? [Y/N] ' remove_dir
+            read -p 'Do you want to remove '$file_path'/'$file_type' files from local? [Y/N] ' remove_dir
             if [[ $remove_dir =~ ^([Yy])+$ ]]; then
-              rm -vRf $file_space_path'/''EHT_'$file_type
+                rm -vRf $file_path'/''EHT_'$file_type
             elif [[ $remove_dir =~ ^([Nn])+$ ]]; then
-              exit 0
+                exit 0
             else
-              echo 'You can only choose yes or no'
+                echo 'You can only choose yes or no'
             fi
         elif [[ $remote =~ ^([Nn])+$ ]]; then
-          exit 0
+            exit 0
         else
-          echo 'You can only choose yes or no'
+            echo 'You can only choose yes or no'
         fi
         ;;
     10)
