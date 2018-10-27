@@ -68,7 +68,7 @@ case $var in
     1)
         wget -P /usr/local/bin https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-WiFi-Reconnect/wifi-reconnect.sh
         chmod +x /usr/local/bin/wifi-reconnect.sh
-        echo '* * * * * root /usr/local/bin/wifi-reconnect.sh' >> /etc/crontab
+        echo '* * * * * root /usr/local/bin/wifi-reconnect.sh >/dev/null 2>&1' >> /etc/crontab
         ;;
     2)
         #Check sSMTP
