@@ -52,6 +52,9 @@ if [[ $start_set_up =~ ^([Yy])+$ ]]; then
     sed -i 's/#utf8_filesystem=YES/utf8_filesystem=YES/g' /etc/vsftpd.conf
     systemctl start vsftpd
     systemctl enable vsftpd
+    #Set up history ignore duplicates
+    sed -i 's/HISTCONTROL=ignoreboth/HISTCONTROL=ignoreboth:erasedups/g' /home/pi/.bashrc
+    source /home/pi/.bashrc
 elif [[ $start_set_up =~ ^([Nn])+$ ]]; then
     apt-get clean
 else
