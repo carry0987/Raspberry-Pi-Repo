@@ -43,7 +43,7 @@ read -p 'Set up main packages? [Y/N]> ' start_set_up
 if [[ $start_set_up =~ ^([Yy])+$ ]]; then
     apt-get update
     apt-get dist-upgrade
-    apt-get install zip vsftpd unzip wget vim screen #smartmontools
+    apt-get install zip vsftpd unzip wget vim screen exfat-fuse #smartmontools
     apt-get clean
     #Set up vsftpd
     sed -i 's/ssl_enable=NO/ssl_enable=YES/g' /etc/vsftpd.conf
