@@ -113,11 +113,11 @@ case $var in
         sed -i 's/email_to='\'Receiver@gmail.com\''/email_to='\'${receiver}\''/g' /home/pi/report-ip.sh
         chmod +x report-ip.sh
         mv report-ip.sh /usr/local/bin
-        wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip-sh.service
-        mv report-ip-sh.service /etc/systemd/system
-        systemctl enable report-ip-sh
-        systemctl start report-ip-sh
-        systemctl status report-ip-sh
+        #wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip-sh.service
+        #mv report-ip-sh.service /etc/systemd/system
+        #systemctl enable report-ip-sh
+        #systemctl start report-ip-sh
+        #systemctl status report-ip-sh
         echo '* * * * * root /bin/bash /usr/local/bin/report-ip.sh >/dev/null 2>&1' >> /etc/crontab
         ;;
     3)
@@ -138,12 +138,12 @@ case $var in
         sed -i 's/receiver = \["Receiver@gmail.com"\]/receiver = \["'$receiver'"\]/g' /home/pi/report-ip.py
         chmod +x report-ip.py
         mv report-ip.py /usr/local/bin
-        wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip-py.service
-        mv report-ip-py.service /etc/systemd/system
-        systemctl enable report-ip-py
-        systemctl start report-ip-py
-        systemctl status report-ip-py
-        echo '* * * * * root /usr/bin/python3.5 /usr/local/bin/report-ip.py' >> /etc/crontab
+        #wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip-py.service
+        #mv report-ip-py.service /etc/systemd/system
+        #systemctl enable report-ip-py
+        #systemctl start report-ip-py
+        #systemctl status report-ip-py
+        echo '* * * * * root /usr/bin/python3.5 /usr/local/bin/report-ip.py >/dev/null 2>&1' >> /etc/crontab
         ;;
     4)
         echo 'Exited'

@@ -14,8 +14,11 @@ subject_changed=$sender' IP CHANGED'
 subject_not_changed=$sender' IP INFO'
 
 # Check IP
-if [ -e /home/pi/last-ip.log ]
-then
+if [ -e /home/pi/last-ip.log ]; then
+    last_ip_permission=`stat -c %A /home/pi/last-ip.log`
+    if [[ last_ip_permission != '-rw-r--r--' ]]; then
+        sudo chmod 777 /home/pi/last-ip.log
+    fi
     last_ip=`cat /home/pi/last-ip.log`
 else
     touch /home/pi/last-ip.log
@@ -23,8 +26,7 @@ else
     last_ip=`cat /home/pi/last-ip.log`
 fi
 
-if [ $public_ip != $last_ip ]
-then
+if [ $public_ip != $last_ip ]; then
     echo $public_ip > /home/pi/last-ip.log
     echo 'IP changed. New ip: '$public_ip
     {
