@@ -4,6 +4,7 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
+User=root
 ExecStart=/bin/bash /usr/local/bin/report-ip.sh
 
 [Install]
