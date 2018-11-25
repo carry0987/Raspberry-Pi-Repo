@@ -98,7 +98,7 @@ case $tool in
             config_save_path=${default_save_path%/}
             touch /home/pi/.config/youtube-dl/config
             echo '# Save all videos under Movies directory in your home directory' > /home/pi/.config/youtube-dl/config
-            echo '-o '${config_save_path}'/%(title)s.%(ext)s' >> /home/pi/.config/youtube-dl/config/config
+            echo '-o '${config_save_path}'/%(title)s.%(ext)s' >> /home/pi/.config/youtube-dl/config
             sudo chmod -R 777 /home/pi/.config/youtube-dl
             cat /home/pi/.config/youtube-dl/config
             echo 'Set Up Success !'
