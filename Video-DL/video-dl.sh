@@ -13,7 +13,8 @@ fi
 
 echo '1) Download videos (link)'
 echo '2) Download videos (list)'
-echo '3) Exit'
+echo '3) Set youtube-dl config'
+echo '4) Exit'
 read -p 'Which tool do you want to use ? ' tool
 
 #Detect tools
@@ -91,6 +92,13 @@ case $tool in
         fi
         ;;
     3)
+        sudo mkdir -p /home/pi/.config/youtube-dl/config
+        sudo wget -P /home/pi/.config/youtube-dl/config https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Video-DL/config
+        sudo chmod -R 777 /home/pi/.config/youtube-dl
+        cat /home/pi/.config/youtube-dl/config/config
+        echo 'Set Up Success !'
+        ;;
+    4)
         echo 'Exited'
         ;;
     *)
