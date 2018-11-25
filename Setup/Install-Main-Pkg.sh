@@ -58,7 +58,7 @@ if [[ $start_set_up =~ ^([Yy])+$ ]]; then
 elif [[ $start_set_up =~ ^([Nn])+$ ]]; then
     apt-get clean
 else
-  echo 'You can only choose yes or no'
+    echo 'You can only choose yes or no'
 fi
 
 echo '1) Set WiFi Reconnect'

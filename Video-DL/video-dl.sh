@@ -92,11 +92,31 @@ case $tool in
         fi
         ;;
     3)
-        sudo mkdir -p /home/pi/.config/youtube-dl/config
-        sudo wget -P /home/pi/.config/youtube-dl/config https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Video-DL/config
-        sudo chmod -R 777 /home/pi/.config/youtube-dl
-        cat /home/pi/.config/youtube-dl/config/config
-        echo 'Set Up Success !'
+        sudo mkdir -p /home/pi/.config/youtube-dl
+        read -e -p 'Please enter the path that you want to save video files>' default_save_path
+        if [ -e $default_save_path ]; then
+            config_save_path=${default_save_path%/}
+            touch /home/pi/.config/youtube-dl/config
+            echo '# Save all videos under Movies directory in your home directory' > /home/pi/.config/youtube-dl/config
+            echo '-o '${config_save_path}'/%(title)s.%(ext)s' >> /home/pi/.config/youtube-dl/config/config
+            sudo chmod -R 777 /home/pi/.config/youtube-dl
+            cat /home/pi/.config/youtube-dl/config
+            echo 'Set Up Success !'
+        else
+            echo 'Cannot get your type, do you want to save in /media/hd/file ? [Y/N]>' set_config
+            if [[ $set_config =~ ^([Yy])+$ ]]; then
+                wget -P /home/pi/.config/youtube-dl https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Video-DL/config
+                sudo chmod -R 777 /home/pi/.config/youtube-dl
+                cat /home/pi/.config/youtube-dl/config
+                echo 'Set Up Success !'
+            elif [[ $set_config =~ ^([Nn])+$ ]]; then
+                echo 'Exited'
+                exit 0
+            else
+                echo 'You can only choose yes or no'
+                exit 0
+            fi
+        fi
         ;;
     4)
         echo 'Exited'
