@@ -2,14 +2,14 @@
 
 set -e
 
-#Set path & user
+# Set path & user
 check_user=$USER
 script_path="$(cd "$(dirname "$0")"; pwd -P)"
 
-#Set Time & Date NTP
+# Set Time & Date NTP
 timedatectl set-ntp yes
 
-#Check if TCP-BBR has already setup
+# Check if TCP-BBR has already setup
 if [ `grep -c "net.core.default_qdisc=fq" /etc/sysctl.conf` -eq '1' ]; then
     bbr_qdisc=1
 else
@@ -38,23 +38,29 @@ else
     echo 'Failed to set up TCP-BBR'
 fi
 
-#Update package list
+# Check operating user
+if [ $check_user == 'root' ]; then
+    read -e -p 'Where is your .bashrc file? /home/>' select_user
+fi
+
+
+# Update package list
 read -p 'Set up main packages? [Y/N]> ' start_set_up
 if [[ $start_set_up =~ ^([Yy])+$ ]]; then
     apt-get update
     apt-get dist-upgrade
     apt-get install zip vsftpd unzip wget vim screen exfat-fuse #smartmontools
     apt-get clean
-    #Set up vsftpd
+    # Set up vsftpd
     sed -i 's/ssl_enable=NO/ssl_enable=YES/g' /etc/vsftpd.conf
     sed -i 's/#local_umask=022/local_umask=022/g' /etc/vsftpd.conf
     sed -i 's/#write_enable=YES/write_enable=YES/g' /etc/vsftpd.conf
     sed -i 's/#utf8_filesystem=YES/utf8_filesystem=YES/g' /etc/vsftpd.conf
     systemctl start vsftpd
     systemctl enable vsftpd
-    #Set up history ignore duplicates
-    sed -i 's/HISTCONTROL=ignoreboth/HISTCONTROL=ignoreboth:erasedups/g' /home/pi/.bashrc
-    source /home/pi/.bashrc
+    # Set up history ignore duplicates
+    sed -i 's/HISTCONTROL=ignoreboth/HISTCONTROL=ignoreboth:erasedups/g' /home/${select_user}/.bashrc
+    source /home/${select_user}/.bashrc
 elif [[ $start_set_up =~ ^([Nn])+$ ]]; then
     apt-get clean
 else
@@ -74,7 +80,7 @@ case $var in
         echo '* * * * * root /usr/local/bin/wifi-reconnect.sh >/dev/null 2>&1' >> /etc/crontab
         ;;
     2)
-        #Check sSMTP
+        # Check sSMTP
         if ! [ -x "$(command -v ssmtp)" ]; then
             echo 'sSMTP is not installed.' >&2
             sudo apt-get update
@@ -85,24 +91,24 @@ case $var in
         wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip.sh
         read -p 'Please enter this device name>' name
         echo 'Name: ' $name
-        sed -i 's/sender=\[HatH\]/sender='${name}'/g' /home/pi/report-ip.sh
+        sed -i 's/sender=\[HatH\]/sender='${name}'/g' /home/${select_user}/report-ip.sh
         read -p 'Please enter sender email address> ' email
         echo 'Sender email address is '$email
-        sed -i 's/email_from='\'Sender@gmail.com\''/email_from='\'${email}\''/g' /home/pi/report-ip.sh
+        sed -i 's/email_from='\'Sender@gmail.com\''/email_from='\'${email}\''/g' /home/${select_user}/report-ip.sh
         echo 'Setting up sSMTP...'
         sudo cp /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.bak
         sudo rm -rf /etc/ssmtp/ssmtp.conf
         wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/sSMTP/ssmtp.conf
-        sed -i 's/AuthUser=user@gmail.com/AuthUser='${email}'/g' /home/pi/ssmtp.conf
+        sed -i 's/AuthUser=user@gmail.com/AuthUser='${email}'/g' /home/${select_user}/ssmtp.conf
         #read -p 'Please enter email address that used to receive system info> ' ssmtp_root
-        #sed -i 's/root=localhost/root='${ssmtp_root}'/g' /home/pi/ssmtp.conf
+        #sed -i 's/root=localhost/root='${ssmtp_root}'/g' /home/${select_user}/ssmtp.conf
         #read -p 'Please enter the hostname that you want to use> ' ssmtp_hostname
-        #sed -i 's/hostname=raspberrypi/hostname='${ssmtp_hostname}'/g' /home/pi/ssmtp.conf
+        #sed -i 's/hostname=raspberrypi/hostname='${ssmtp_hostname}'/g' /home/${select_user}/ssmtp.conf
         echo "If you don't have the App Password, please go here to get the password:"
         echo 'https://security.google.com/settings/security/apppasswords'
         read -p 'Please enter your email password> ' password
-        sed -i 's/AuthPass=authpass/AuthPass='${password}'/g' /home/pi/ssmtp.conf
-        sudo mv /home/pi/ssmtp.conf /etc/ssmtp/
+        sed -i 's/AuthPass=authpass/AuthPass='${password}'/g' /home/${select_user}/ssmtp.conf
+        sudo mv /home/${select_user}/ssmtp.conf /etc/ssmtp/
         sudo groupadd ssmtp
         sudo chown :ssmtp /etc/ssmtp/ssmtp.conf
         sudo chown :ssmtp /usr/sbin/ssmtp
@@ -110,7 +116,7 @@ case $var in
         sudo chmod g+s /usr/sbin/ssmtp
         read -p 'Please enter receiver email address> ' receiver
         echo 'Receiver Email is '$receiver
-        sed -i 's/email_to='\'Receiver@gmail.com\''/email_to='\'${receiver}\''/g' /home/pi/report-ip.sh
+        sed -i 's/email_to='\'Receiver@gmail.com\''/email_to='\'${receiver}\''/g' /home/${select_user}/report-ip.sh
         chmod +x report-ip.sh
         mv report-ip.sh /usr/local/bin
         wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip-sh.service
@@ -125,17 +131,17 @@ case $var in
         wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip.py
         read -p 'Please enter this device name>' name
         echo 'Name: ' $name
-        sed -i 's/sender = "RPi"/sender = "'${name}'"/g' /home/pi/report-ip.py
+        sed -i 's/sender = "RPi"/sender = "'${name}'"/g' /home/${select_user}/report-ip.py
         read -p 'Please enter sender email address> ' email
         echo 'Sender email address is '$email
-        sed -i 's/username = "Sender@gmail.com"/username = "'${email}'"/g' /home/pi/report-ip.py
+        sed -i 's/username = "Sender@gmail.com"/username = "'${email}'"/g' /home/${select_user}/report-ip.py
         echo "If you don't have the App Password, please go here to get the password:"
         echo 'https://security.google.com/settings/security/apppasswords'
         read -p 'Please enter your email password> ' password
-        sed -i 's/password = "Sender Password"/password = "'${password}'"/g' /home/pi/report-ip.py
+        sed -i 's/password = "Sender Password"/password = "'${password}'"/g' /home/${select_user}/report-ip.py
         read -p 'Please enter receiver email address> ' receiver
         echo 'Receiver Email is '$receiver
-        sed -i 's/receiver = \["Receiver@gmail.com"\]/receiver = \["'$receiver'"\]/g' /home/pi/report-ip.py
+        sed -i 's/receiver = \["Receiver@gmail.com"\]/receiver = \["'$receiver'"\]/g' /home/${select_user}/report-ip.py
         chmod +x report-ip.py
         mv report-ip.py /usr/local/bin
         wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip-py.service
