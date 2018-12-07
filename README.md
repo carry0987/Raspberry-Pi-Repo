@@ -95,7 +95,7 @@ This script has these features
 ```
 1. Download files (link)
 2. Download files (list)
-3. Count files
+3. Count Files
 4. Delete File Or Folder
 5. Check Crontab status
 6. Rclone copy files
@@ -112,7 +112,8 @@ This script has these features
 17. Check RPi kernal version
 18. Resource Monitor (Sort By CPU)
 19. Resource Monitor (Sort By Memory)
-20. Exit
+20. Estimate Usage Of Folder
+21. Exit
 ```
 
 1. Use wget to download the script
