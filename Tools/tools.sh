@@ -4,7 +4,7 @@ set -e
 
 echo '1) Download files (link)'
 echo '2) Download files (list)'
-echo '3) Count files'
+echo '3) Count Files'
 echo '4) Delete File Or Folder'
 echo '5) Check Crontab status'
 echo '6) Rclone copy files'
@@ -21,7 +21,8 @@ echo '16) Update Packages'
 echo '17) Check RPi kernal version'
 echo '18) Resource Monitor (Sort By CPU)'
 echo '19) Resource Monitor (Sort By Memory)'
-echo '20) Exit'
+echo '20) Estimate Usage Of Folder'
+echo '21) Exit'
 read -p 'Which tool do you want to use ? ' tool
 
 #Detect tools
@@ -235,6 +236,14 @@ case $tool in
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head
         ;;
     20)
+        read -e -p 'Please enter the folder that you want to estimate usage of>' estimate_folder
+        if [ -z $estimate_folder ]; then
+            echo 'You must type the folder path !'
+        else
+            du -sch ${estimate_folder//\'/\'\"\'\"\'}
+        fi
+        ;;
+    21)
         echo 'Exited'
         ;;
     *)
