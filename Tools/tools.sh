@@ -237,10 +237,11 @@ case $tool in
         ;;
     20)
         read -e -p 'Please enter the folder that you want to estimate usage of>' estimate_folder
-        if [ -z $estimate_folder ]; then
+        if [[ -z $estimate_folder ]]; then
             echo 'You must type the folder path !'
         else
-            du -sch ${estimate_folder//\'/\'\"\'\"\'}
+            count_estimate_folder=${estimate_folder%/}
+            du -sch $count_estimate_folder
         fi
         ;;
     21)
