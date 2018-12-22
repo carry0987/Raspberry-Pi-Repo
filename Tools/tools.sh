@@ -25,11 +25,17 @@ echo '20) Estimate Usage Of Folder'
 echo '21) Exit'
 read -p 'Which tool do you want to use ? ' tool
 
+DEFAULT_PATH=''
+
 #Detect tools
 case $tool in
     1)
         read -p 'Please enter your link>' link
-        read -e -p 'Please enter the path that you want to save this file, or just leave blank if you want to save to current path>' download_path
+        if [[ -z $DEFAULT_PATH ]]; then
+            read -e -p 'Please enter the path that you want to save this file, or just leave blank if you want to save to current path>' download_path
+        else
+            download_path=$DEFAULT_PATH
+        fi
         if [ -z $download_path ]; then
             wget --content-disposition $link
         else
