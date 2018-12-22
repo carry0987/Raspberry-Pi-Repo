@@ -44,7 +44,11 @@ case $tool in
         ;;
     2)
         read -e -p 'Please enter your path of link list>' link_list
-        read -e -p 'Please enter the path that you want to save this file, or just leave blank if you want to save to current path>' download_list_path
+        if [[ -z $DEFAULT_PATH ]]; then
+            read -e -p 'Please enter the path that you want to save this file, or just leave blank if you want to save to current path>' download_list_path
+        else
+            download_list_path=$DEFAULT_PATH
+        fi
         if [ -z $download_list_path ]; then
             wget --content-disposition -i $link_list
         else
