@@ -26,8 +26,10 @@ case $var in
         echo 'Setting sSMTP...'
         read -p 'Please enter sender email address> ' email
         echo 'Sender email address is '$email
-        sudo cp /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.bak
-        sudo rm -rf /etc/ssmtp/ssmtp.conf
+        if [[ -e /etc/ssmtp/ssmtp.conf ]]; then
+            sudo cp /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.bak
+            sudo rm -rf /etc/ssmtp/ssmtp.conf
+        fi
         wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/sSMTP/ssmtp.conf
         sed -i 's/AuthUser=user@gmail.com/AuthUser='${email}'/g' /home/${select_user}/ssmtp.conf
         echo "If you don't have the App Password, please go here to get the password:"
@@ -35,7 +37,11 @@ case $var in
         read -p 'Please enter your email password> ' password
         sed -i 's/AuthPass=authpass/AuthPass='${password}'/g' /home/${select_user}/ssmtp.conf
         sudo mv /home/${select_user}/ssmtp.conf /etc/ssmtp/
-        sudo groupadd ssmtp
+        if [[ $(getent group ssmtp) ]]; then
+            echo 'group ssmtp exists'
+        else
+            sudo groupadd ssmtp
+        fi
         sudo chown :ssmtp /etc/ssmtp/ssmtp.conf
         sudo chown :ssmtp /usr/sbin/ssmtp
         sudo chmod 640 /etc/ssmtp/ssmtp.conf
