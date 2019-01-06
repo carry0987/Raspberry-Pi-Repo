@@ -9,13 +9,13 @@ if ! [ -x "$(command -v deluged)" ]; then
     sudo apt-get dist-upgrade
     echo 'deb http://ftp.us.debian.org/debian sid main' >> /etc/apt/sources.list
     sudo apt-get update
-    sudo apt-get install deluged deluge-console deluge-web python-mako
+    sudo apt-get install deluged deluge-console
     sed -i '/deb http:\/\/ftp.us.debian.org\/debian sid main/d' /etc/apt/sources.list
     sudo apt-get update
     sudo apt-get clean
 fi
 
-#Check if deluge stat file exist
+# Check if deluge stat file exist
 if [ -z '/home/pi/.config/deluge/state/torrents.state' ]; then
         echo 'Make up stat file...'
         sudo touch /home/pi/.config/deluge/state/torrents.state
@@ -37,7 +37,7 @@ fi
 #        sudo chmod 777 /home/pi/.config/deluge/web.conf
 #fi
 
-#Setting Deluge
+# Setting Deluge
 check_user=$USER
 if [ $check_user == 'root' ]; then
     read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
@@ -80,8 +80,10 @@ if [ $check_user == 'root' ]; then
     echo 'Please enter the directory for downloading files, or just leave blank if the path is '$deluge_base'/deluge/downloading :'
     read -e -p '>'$deluge_base'/' deluge_downloading
     if [ -z $deluge_downloading ]; then
-        sudo mkdir -p $deluge_base/deluge/downloading
-        sudo chmod 777 $deluge_base/deluge/downloading
+        if [[ ! -d "$deluge_base"/deluge/downloading ]]; then
+            sudo mkdir -p $deluge_base/deluge/downloading
+            sudo chmod 777 $deluge_base/deluge/downloading
+        fi
         echo 'Setting up download location to '${deluge_base}'/deluge/downloading'
         su $select_user -c "deluge-console config -s download_location ${deluge_base}/deluge/downloading"
     else
@@ -94,8 +96,10 @@ if [ $check_user == 'root' ]; then
     echo 'Please enter the directory for completed files, or just leave blank if the path is '$deluge_base'/deluge/completed :'
     read -e -p '>'$deluge_base'/' deluge_completed
     if [ -z $deluge_completed ]; then
-        sudo mkdir -p $deluge_base/deluge/completed
-        sudo chmod 777 $deluge_base/deluge/completed
+        if [[ ! -d "$deluge_base"/deluge/completed ]]; then
+            sudo mkdir -p $deluge_base/deluge/completed
+            sudo chmod 777 $deluge_base/deluge/completed
+        fi
         echo 'Setting up completed location to '${deluge_base}'/deluge/completed'
         su $select_user -c "deluge-console config -s move_completed_path ${deluge_base}/deluge/completed"
         su $select_user -c "deluge-console config -s move_completed True"
@@ -110,8 +114,10 @@ if [ $check_user == 'root' ]; then
     echo 'Please enter the directory for torrent-backups files, or just leave blank if the path is '$deluge_base'/deluge/torrent-backups :'
     read -e -p '>'$deluge_base'/' deluge_torrent_backups
     if [ -z $deluge_torrent_backups ]; then
-        sudo mkdir -p $deluge_base/deluge/torrent-backups
-        sudo chmod 777 $deluge_base/deluge/torrent-backups
+        if [[ ! -d "$deluge_base"/deluge/torrent-backups ]]; then
+            sudo mkdir -p $deluge_base/deluge/torrent-backups
+            sudo chmod 777 $deluge_base/deluge/torrent-backups
+        fi
         echo 'Setting up torrent-backups location to '${deluge_base}'/deluge/torrent-backups'
         su $select_user -c "deluge-console config -s torrentfiles_location ${deluge_base}/deluge/torrent-backups"
         su $select_user -c "deluge-console config -s copy_torrent_file True"
@@ -126,8 +132,10 @@ if [ $check_user == 'root' ]; then
     echo 'Please enter the directory for auto-add-torrent files, or just leave blank if the path is '$deluge_base'/deluge/watch :'
     read -e -p '>'$deluge_base'/' deluge_watch
     if [ -z $deluge_watch ]; then
-        sudo mkdir -p $deluge_base/deluge/watch
-        sudo chmod 777 $deluge_base/deluge/watch
+        if [[ ! -d "$deluge_base"/deluge/watch ]]; then
+            sudo mkdir -p $deluge_base/deluge/watch
+            sudo chmod 777 $deluge_base/deluge/watch
+        fi
         echo 'Setting up auto-add-torrent location to '${deluge_base}'/deluge/watch'
         su $select_user -c "deluge-console config -s autoadd_location ${deluge_base}/deluge/watch"
         su $select_user -c "deluge-console config -s autoadd_enable True"
@@ -161,8 +169,10 @@ else
     echo 'Please enter the directory for downloading files, or just leave blank if the path is '$deluge_base'/deluge/downloading :'
     read -e -p '>'$deluge_base'/' deluge_downloading
     if [ -z $deluge_downloading ]; then
-        sudo mkdir -p $deluge_base/deluge/downloading
-        sudo chmod 777 $deluge_base/deluge/downloading
+        if [[ ! -d "$deluge_base"/deluge/downloading ]]; then
+            sudo mkdir -p $deluge_base/deluge/downloading
+            sudo chmod 777 $deluge_base/deluge/downloading
+        fi
         echo 'Setting up download location to '${deluge_base}'/deluge/downloading'
         su $USER -c "deluge-console config -s download_location ${deluge_base}/deluge/downloading"
     else
@@ -175,8 +185,10 @@ else
     echo 'Please enter the directory for completed files, or just leave blank if the path is '$deluge_base'/deluge/completed :'
     read -e -p '>'$deluge_base'/' deluge_completed
     if [ -z $deluge_completed ]; then
-        sudo mkdir -p $deluge_base/deluge/completed
-        sudo chmod 777 $deluge_base/deluge/completed
+        if [[ ! -d "$deluge_base"/deluge/completed ]]; then
+            sudo mkdir -p $deluge_base/deluge/completed
+            sudo chmod 777 $deluge_base/deluge/completed
+        fi
         echo 'Setting up completed location to '${deluge_base}'/deluge/completed'
         su $USER -c "deluge-console config -s move_completed_path ${deluge_base}/deluge/completed"
         su $USER -c "deluge-console config -s move_completed True"
@@ -191,8 +203,10 @@ else
     echo 'Please enter the directory for torrent-backups files, or just leave blank if the path is '$deluge_base'/deluge/torrent-backups :'
     read -e -p '>'$deluge_base'/' deluge_torrent_backups
     if [ -z $deluge_torrent_backups ]; then
-        sudo mkdir -p $deluge_base/deluge/torrent-backups
-        sudo chmod 777 $deluge_base/deluge/torrent-backups
+        if [[ ! -d "$deluge_base"/deluge/torrent-backups ]]; then
+            sudo mkdir -p $deluge_base/deluge/torrent-backups
+            sudo chmod 777 $deluge_base/deluge/torrent-backups
+        fi
         echo 'Setting up torrent-backups location to '${deluge_base}'/deluge/torrent-backups'
         su $USER -c "deluge-console config -s torrentfiles_location ${deluge_base}/deluge/torrent-backups"
         su $USER -c "deluge-console config -s copy_torrent_file True"
@@ -207,8 +221,10 @@ else
     echo 'Please enter the directory for auto-add-torrent files, or just leave blank if the path is '$deluge_base'/deluge/watch :'
     read -e -p '>'$deluge_base'/' deluge_watch
     if [ -z $deluge_watch ]; then
-        sudo mkdir -p $deluge_base/deluge/watch
-        sudo chmod 777 $deluge_base/deluge/watch
+        if [[ ! -d "$deluge_base"/deluge/watch ]]; then
+            sudo mkdir -p $deluge_base/deluge/watch
+            sudo chmod 777 $deluge_base/deluge/watch
+        fi
         echo 'Setting up auto-add-torrent location to '${deluge_base}'/deluge/watch'
         su $USER -c "deluge-console config -s autoadd_location ${deluge_base}/deluge/watch"
         su $USER -c "deluge-console config -s autoadd_enable True"
@@ -222,7 +238,7 @@ else
 fi
 
 if [ $check_user == 'root' ]; then
-    read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
+    read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run script under Root>' select_user
     su $select_user -c "pkill deluged"
 else
     su $USER -c "pkill deluged"
@@ -233,9 +249,9 @@ fi
 
 echo 'Setting auto start Deluge on boot...'
 wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Deluge-Set/deluged.service
-wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Deluge-Set/deluge-web.service
+#wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Deluge-Set/deluge-web.service
 sudo mv deluged.service /etc/systemd/system/
-sudo mv deluge-web.service /etc/systemd/system/
+#sudo mv deluge-web.service /etc/systemd/system/
 read -p 'Please enter the name of driver if you have set it in fstab, or just leave it blank>' deluge_mount
 if [ -z $deluge_mount ]; then
     sed -i 's/After=network-online.target drive.mount/After=network-online.target/g' /etc/systemd/system/deluged.service
@@ -249,15 +265,15 @@ else
     sed -i 's/WantedBy=multi-user.target drive.mount/WantedBy=multi-user.target '${deluge_mount}'.mount/g' /etc/systemd/system/deluged.service
 fi
 sudo chmod 660 /etc/systemd/system/deluged.service
-sudo chmod 660 /etc/systemd/system/deluge-web.service
+#sudo chmod 660 /etc/systemd/system/deluge-web.service
 sudo systemctl daemon-reload
 sudo systemctl enable deluged.service
 sudo systemctl start deluged
 sudo systemctl status deluged
 sleep 3
-sudo systemctl enable deluge-web.service
-sudo systemctl start deluge-web
-sudo systemctl status deluge-web
+#sudo systemctl enable deluge-web.service
+#sudo systemctl start deluge-web
+#sudo systemctl status deluge-web
 
 #At this point, your Deluge daemon is ready for remote access.
 #Head to your normal PC (not the Raspberry Pi) and install the Deluge desktop program.
