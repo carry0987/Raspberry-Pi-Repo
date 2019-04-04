@@ -223,9 +223,16 @@ case $tool in
         fi
         ;;
     16)
-        apt-get update
-        apt-get dist-upgrade
-        apt-get clean
+        check_user=$USER
+        if [ $check_user == 'root' ]; then
+            apt-get update
+            apt-get dist-upgrade
+            apt-get clean
+        else
+            sudo apt-get update
+            sudo apt-get dist-upgrade
+            sudo apt-get clean
+        fi
         ;;
     17)
         uname -a
