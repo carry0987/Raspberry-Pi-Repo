@@ -49,7 +49,7 @@ read -p 'Set up main packages? [Y/N]> ' start_set_up
 if [[ $start_set_up =~ ^([Yy])+$ ]]; then
     apt-get update
     apt-get dist-upgrade
-    apt-get install zip vsftpd unzip wget vim screen exfat-fuse #smartmontools
+    apt-get install zip vsftpd unzip wget vim screen exfat-fuse haveged #smartmontools
     apt-get clean
     # Set up vsftpd
     sed -i 's/ssl_enable=NO/ssl_enable=YES/g' /etc/vsftpd.conf
@@ -58,6 +58,8 @@ if [[ $start_set_up =~ ^([Yy])+$ ]]; then
     sed -i 's/#utf8_filesystem=YES/utf8_filesystem=YES/g' /etc/vsftpd.conf
     systemctl start vsftpd
     systemctl enable vsftpd
+    systemctl enable haveged
+    systemctl start haveged
     # Set up history ignore duplicates
     sed -i 's/HISTCONTROL=ignoreboth/HISTCONTROL=ignoreboth:erasedups/g' /home/${select_user}/.bashrc
     source /home/${select_user}/.bashrc
