@@ -7,11 +7,7 @@ if ! [ -x "$(command -v deluged)" ]; then
     echo 'Deluge is not installed.' >&2
     sudo apt-get update
     sudo apt-get dist-upgrade
-    echo 'deb http://ftp.us.debian.org/debian sid main' >> /etc/apt/sources.list
-    sudo apt-get update
     sudo apt-get install deluged deluge-console
-    sed -i '/deb http:\/\/ftp.us.debian.org\/debian sid main/d' /etc/apt/sources.list
-    sudo apt-get update
     sudo apt-get clean
 fi
 
