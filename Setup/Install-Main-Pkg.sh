@@ -43,6 +43,32 @@ if [ $check_user == 'root' ]; then
     read -e -p 'Where is your .bashrc file? /home/>' select_user
 fi
 
+# Set locale
+read -p 'Set up locale? [Y/N]> ' start_set_lc
+if [[ $start_set_lc =~ ^([Yy])+$ ]]; then
+    rm /etc/default/locale
+    touch /etc/default/locale
+    chmod 644 /etc/default/locale
+    read -p 'Please type your Language>' language
+    echo 'LANG='$language >> /etc/default/locale
+    echo 'LANGUAGE='$language >> /etc/default/locale
+    echo 'LC_ALL='$language >> /etc/default/locale
+    echo 'LC_TYPE='$language >> /etc/default/locale
+    echo '#####################'
+    cat /etc/default/locale
+    echo '#####################'
+    echo 'Wait 5 seconds to reboot...'
+    sleep 5
+    sudo reboot
+    exit 0
+elif [[ $start_set_lc =~ ^([Nn])+$ ]]; then
+    echo '#####################'
+    cat /etc/default/locale
+    echo '#####################'
+else
+    echo 'You can only choose yes or no'
+    exit 0
+fi
 
 # Update package list
 read -p 'Set up main packages? [Y/N]> ' start_set_up
@@ -67,6 +93,7 @@ elif [[ $start_set_up =~ ^([Nn])+$ ]]; then
     apt-get clean
 else
     echo 'You can only choose yes or no'
+    exit 0
 fi
 
 echo '1) Set WiFi Reconnect'
