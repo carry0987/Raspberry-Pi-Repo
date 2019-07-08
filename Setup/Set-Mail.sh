@@ -2,6 +2,15 @@
 
 set -e
 
+# Set path & user
+check_user=$USER
+script_path="$(cd "$(dirname "$0")"; pwd -P)"
+
+# Check operating user
+if [ $check_user == 'root' ]; then
+    read -e -p 'Where is your .bashrc file? /home/>' select_user
+fi
+
 echo '1) Set WiFi Reconnect'
 echo '2) Set Auto Report IP (Shell)'
 echo '3) Set Auto Report IP (Python)'
