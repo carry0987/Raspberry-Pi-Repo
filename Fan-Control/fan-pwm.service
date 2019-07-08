@@ -1,0 +1,12 @@
+[Unit]
+Description=Fan Controller
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=root
+ExecStart=/bin/bash /usr/local/bin/fan.sh
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target

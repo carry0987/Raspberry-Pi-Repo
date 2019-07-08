@@ -7,7 +7,7 @@ timestamp() {
 }
 
 LOGDIR='/var/log/fan.log'
-VALUE=42
+VALUE=45
 TEMP=`vcgencmd measure_temp | cut -c6,7`
 
 if [[ -e /sys/class/gpio/gpio2/value ]]; then
@@ -39,3 +39,5 @@ else
         sudo sh -c 'echo "0" > /sys/class/gpio/gpio2/value'
     fi
 fi
+
+exit 0
