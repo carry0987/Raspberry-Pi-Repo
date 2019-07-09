@@ -2,28 +2,34 @@
 
 set -e
 
-echo '1) Download files (link)'
-echo '2) Download files (list)'
-echo '3) Count Files'
-echo '4) Delete File Or Folder'
-echo '5) Check Crontab status'
-echo '6) Rclone copy files'
-echo '7) Rclone move files'
-echo '8) Rclone delete files'
-echo '9) Rclone upload type files'
-echo '10) Rclone sync remotes'
-echo '11) Rclone list remotes'
-echo '12) Rclone config file location'
-echo '13) Get CPU Temperature'
-echo '14) Get Pi Voltage'
-echo '15) Set TCP-BBR'
-echo '16) Update Packages'
-echo '17) Check RPi kernal version'
-echo '18) Resource Monitor (Sort By CPU)'
-echo '19) Resource Monitor (Sort By Memory)'
-echo '20) Estimate Usage Of Folder'
-echo '21) Exit'
-read -p 'Which tool do you want to use ? ' tool
+if [[ -n $1 && $1 =~ ^[0-9]+$ ]]; then
+    tool=$1
+fi
+
+if [[ ! -n $tool ]]; then
+    echo '1) Download files (link)'
+    echo '2) Download files (list)'
+    echo '3) Count Files'
+    echo '4) Delete File Or Folder'
+    echo '5) Check Crontab status'
+    echo '6) Rclone copy files'
+    echo '7) Rclone move files'
+    echo '8) Rclone delete files'
+    echo '9) Rclone upload type files'
+    echo '10) Rclone sync remotes'
+    echo '11) Rclone list remotes'
+    echo '12) Rclone config file location'
+    echo '13) Get CPU Temperature'
+    echo '14) Get Pi Voltage'
+    echo '15) Set TCP-BBR'
+    echo '16) Update Packages'
+    echo '17) Check RPi kernal version'
+    echo '18) Resource Monitor (Sort By CPU)'
+    echo '19) Resource Monitor (Sort By Memory)'
+    echo '20) Estimate Usage Of Folder'
+    echo '21) Exit'
+    read -p 'Which tool do you want to use ? ' tool
+fi
 
 DEFAULT_PATH=''
 
@@ -261,7 +267,7 @@ case $tool in
             du -sch $count_estimate_folder
         fi
         ;;
-    21)
+    21 | 'q')
         echo 'Exited'
         ;;
     *)
