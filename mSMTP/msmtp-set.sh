@@ -36,15 +36,6 @@ case $var in
         read -p 'Please enter your email password> ' password
         sed -i 's/password passwd/password '${password}'/g' /home/${select_user}/gmail-msmtprc
         sudo mv /home/${select_user}/gmail-msmtprc /etc/msmtp/
-        if [[ $(getent group msmtp) ]]; then
-            echo 'group msmtp exists'
-        else
-            sudo groupadd msmtp
-        fi
-        sudo chown :msmtp /etc/msmtp/gmail-msmtprc
-        sudo chown :msmtp /usr/sbin/msmtp
-        sudo chmod 640 /etc/msmtp/gmail-msmtprc
-        sudo chmod g+s /usr/sbin/msmtp
         echo 'Sending test email...'
         read -p 'Please enter receiver email address> ' receiver
         echo 'Receiver Email is '$receiver
