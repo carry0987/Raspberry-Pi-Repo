@@ -1,0 +1,20 @@
+# Define here some setting that can be useful for every account
+defaults
+        logfile /var/log/msmtp/general.log
+
+# Settings for gmail account
+account gmail
+        protocol smtp
+        host smtp.gmail.com
+        tls on
+        tls_trust_file /etc/ssl/certs/ca-certificates.crt
+        port 587
+        auth on
+        user example@gmail.com
+        password passwd
+        from example@gmail.com
+        logfile /var/log/msmtp/gmail.log
+
+# If you don't use any "-a" parameter in your command line,
+# the default account "gmail" will be used.
+account default: gmail

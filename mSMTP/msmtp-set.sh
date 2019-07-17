@@ -6,50 +6,49 @@ set -e
 check_user=$USER
 script_path="$(cd "$(dirname "$0")"; pwd -P)"
 
-echo '1) Set sSMTP'
+echo '1) Set mSMTP'
 echo '2) Exit'
 read -p 'Please choose what you want to do>' var
 
 case $var in
     1)
-        # Check sSMTP
-        if ! [ -x "$(command -v ssmtp)" ]; then
+        # Check mSMTP
+        if ! [ -x "$(command -v msmtp)" ]; then
             echo 'sSMTP is not installed.' >&2
             sudo apt-get update
             sudo apt-get dist-upgrade
-            sudo apt-get install ssmtp mailutils
+            sudo apt-get install msmtp ca-certificates
         fi
         # Check operating user
         if [[ $check_user == 'root' ]]; then
             read -e -p 'Where is your .bashrc file? /home/>' select_user
         fi
-        echo 'Setting sSMTP...'
+        echo 'Setting mSMTP...'
         read -p 'Please enter sender email address> ' email
         echo 'Sender email address is '$email
-        if [[ -e /etc/ssmtp/ssmtp.conf ]]; then
-            sudo cp /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.bak
-            sudo rm -rf /etc/ssmtp/ssmtp.conf
-        fi
-        wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/sSMTP/ssmtp.conf
-        sed -i 's/AuthUser=user@gmail.com/AuthUser='${email}'/g' /home/${select_user}/ssmtp.conf
+        sudo mkdir -v /etc/msmtp
+        sudo mkdir -v /var/log/msmtp
+        wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/mSMTP/gmail-msmtprc
+        sed -i 's/user example@gmail.com/user '${email}'/g' /home/${select_user}/gmail-msmtprc
+        sed -i 's/from example@gmail.com/from '${email}'/g' /home/${select_user}/gmail-msmtprc
         echo "If you don't have the App Password, please go here to get the password:"
         echo 'https://security.google.com/settings/security/apppasswords'
         read -p 'Please enter your email password> ' password
-        sed -i 's/AuthPass=authpass/AuthPass='${password}'/g' /home/${select_user}/ssmtp.conf
-        sudo mv /home/${select_user}/ssmtp.conf /etc/ssmtp/
-        if [[ $(getent group ssmtp) ]]; then
-            echo 'group ssmtp exists'
+        sed -i 's/password passwd/password '${password}'/g' /home/${select_user}/gmail-msmtprc
+        sudo mv /home/${select_user}/gmail-msmtprc /etc/msmtp/
+        if [[ $(getent group msmtp) ]]; then
+            echo 'group msmtp exists'
         else
-            sudo groupadd ssmtp
+            sudo groupadd msmtp
         fi
-        sudo chown :ssmtp /etc/ssmtp/ssmtp.conf
-        sudo chown :ssmtp /usr/sbin/ssmtp
-        sudo chmod 640 /etc/ssmtp/ssmtp.conf
-        sudo chmod g+s /usr/sbin/ssmtp
+        sudo chown :msmtp /etc/msmtp/gmail-msmtprc
+        sudo chown :msmtp /usr/sbin/msmtp
+        sudo chmod 640 /etc/msmtp/gmail-msmtprc
+        sudo chmod g+s /usr/sbin/msmtp
         echo 'Sending test email...'
         read -p 'Please enter receiver email address> ' receiver
         echo 'Receiver Email is '$receiver
-        echo "This is a test" | ssmtp $receiver
+        echo "This is a test" | msmtp $receiver
         ;;
     2)
         echo 'Exited'

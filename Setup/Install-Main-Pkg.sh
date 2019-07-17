@@ -109,12 +109,12 @@ case $var in
         echo '* * * * * root /usr/local/bin/wifi-reconnect.sh >/dev/null 2>&1' >> /etc/crontab
         ;;
     2)
-        # Check sSMTP
-        if ! [ -x "$(command -v ssmtp)" ]; then
+        # Check mSMTP
+        if ! [ -x "$(command -v msmtp)" ]; then
             echo 'sSMTP is not installed.' >&2
             sudo apt-get update
             sudo apt-get dist-upgrade
-            sudo apt-get install ssmtp mailutils
+            sudo apt-get install msmtp ca-certificates
         fi
         echo 'Installing IP Auto Reporter (Shell)...'
         wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-Report-IP/report-ip.sh
@@ -124,25 +124,26 @@ case $var in
         read -p 'Please enter sender email address> ' email
         echo 'Sender email address is '$email
         sed -i 's/email_from='\'Sender@gmail.com\''/email_from='\'${email}\''/g' /home/${select_user}/report-ip.sh
-        echo 'Setting up sSMTP...'
-        sudo cp /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.bak
-        sudo rm -rf /etc/ssmtp/ssmtp.conf
-        wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/sSMTP/ssmtp.conf
-        sed -i 's/AuthUser=user@gmail.com/AuthUser='${email}'/g' /home/${select_user}/ssmtp.conf
-        #read -p 'Please enter email address that used to receive system info> ' ssmtp_root
-        #sed -i 's/root=localhost/root='${ssmtp_root}'/g' /home/${select_user}/ssmtp.conf
-        #read -p 'Please enter the hostname that you want to use> ' ssmtp_hostname
-        #sed -i 's/hostname=raspberrypi/hostname='${ssmtp_hostname}'/g' /home/${select_user}/ssmtp.conf
+        echo 'Setting up mSMTP...'
+        sudo mkdir -v /etc/msmtp
+        sudo mkdir -v /var/log/msmtp
+        wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/mSMTP/gmail-msmtprc
+        sed -i 's/user example@gmail.com/user '${email}'/g' /home/${select_user}/gmail-msmtprc
+        sed -i 's/from example@gmail.com/from '${email}'/g' /home/${select_user}/gmail-msmtprc
         echo "If you don't have the App Password, please go here to get the password:"
         echo 'https://security.google.com/settings/security/apppasswords'
         read -p 'Please enter your email password> ' password
-        sed -i 's/AuthPass=authpass/AuthPass='${password}'/g' /home/${select_user}/ssmtp.conf
-        sudo mv /home/${select_user}/ssmtp.conf /etc/ssmtp/
-        sudo groupadd ssmtp
-        sudo chown :ssmtp /etc/ssmtp/ssmtp.conf
-        sudo chown :ssmtp /usr/sbin/ssmtp
-        sudo chmod 640 /etc/ssmtp/ssmtp.conf
-        sudo chmod g+s /usr/sbin/ssmtp
+        sed -i 's/password passwd/password '${password}'/g' /home/${select_user}/gmail-msmtprc
+        sudo mv /home/${select_user}/gmail-msmtprc /etc/msmtp/
+        if [[ $(getent group msmtp) ]]; then
+            echo 'group msmtp exists'
+        else
+            sudo groupadd msmtp
+        fi
+        sudo chown :msmtp /etc/msmtp/gmail-msmtprc
+        sudo chown :msmtp /usr/sbin/msmtp
+        sudo chmod 640 /etc/msmtp/gmail-msmtprc
+        sudo chmod g+s /usr/sbin/msmtp
         read -p 'Please enter receiver email address> ' receiver
         echo 'Receiver Email is '$receiver
         sed -i 's/email_to='\'Receiver@gmail.com\''/email_to='\'${receiver}\''/g' /home/${select_user}/report-ip.sh

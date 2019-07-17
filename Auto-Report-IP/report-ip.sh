@@ -34,7 +34,7 @@ if [ $public_ip != $last_ip ]; then
         echo From: $email_from
         echo Subject: $subject_changed
         echo $public_ip
-    } | ssmtp $email_to
+    } | msmtp $email_to
     echo 'Successfully send the e-mail.'
 else
     echo 'IP not change.'
@@ -43,7 +43,7 @@ else
 #        echo From: $email_from
 #        echo Subject: $subject_not_changed
 #        echo $public_ip
-#    } | ssmtp $email_to
+#    } | msmtp $email_to
 #    echo 'Successfully send the e-mail.'
 fi
 
