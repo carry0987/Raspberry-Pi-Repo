@@ -26,7 +26,7 @@ case $var in
     2)
         # Check mSMTP
         if ! [ -x "$(command -v msmtp)" ]; then
-            echo 'sSMTP is not installed.' >&2
+            echo 'mSMTP is not installed.' >&2
             sudo apt-get update
             sudo apt-get dist-upgrade
             sudo apt-get install msmtp ca-certificates
