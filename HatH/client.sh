@@ -1,3 +1,3 @@
 #!/bin/bash -e
 
-java -jar HentaiAtHome.jar
+sudo java -jar HentaiAtHome.jar
