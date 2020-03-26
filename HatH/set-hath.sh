@@ -10,7 +10,7 @@ if ! [ -x "$(command -v java)" ]; then
     echo 'openjdk is not installed' >&2
     apt-get update
     apt-get dist-upgrade
-    sudo apt-get install openjdk-8-jdk
+    sudo apt-get install screen vim openjdk-8-jdk
     sudo apt-get install openjdk-8-jre
     apt-get clean
 fi
