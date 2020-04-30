@@ -23,11 +23,12 @@ if [[ ! -n $tool ]]; then
     echo '14) Get Pi Voltage'
     echo '15) Set TCP-BBR'
     echo '16) Update Packages'
-    echo '17) Check RPi kernal version'
-    echo '18) Resource Monitor (Sort By CPU)'
-    echo '19) Resource Monitor (Sort By Memory)'
-    echo '20) Estimate Usage Of Folder'
-    echo '21) Exit'
+    echo '17) Install Packages'
+    echo '18) Check RPi kernal version'
+    echo '19) Resource Monitor (Sort By CPU)'
+    echo '20) Resource Monitor (Sort By Memory)'
+    echo '21) Estimate Usage Of Folder'
+    echo '22) Exit'
     read -p 'Which tool do you want to use ? ' tool
 fi
 
@@ -241,6 +242,25 @@ case $tool in
         fi
         ;;
     17)
+        read -p 'Please enter the packages name that you want to install>' pkg_name
+        if [ -z $pkg_name ]; then
+            echo 'The package name is empty !'
+            exit 0
+        fi
+        check_user=$USER
+        if [ $check_user == 'root' ]; then
+            apt-get update
+            apt-get dist-upgrade
+            apt-get clean
+            apt-get install $pkg_name
+        else
+            sudo apt-get update
+            sudo apt-get dist-upgrade
+            sudo apt-get clean
+            sudo apt-get install $pkg_name
+        fi
+        ;;
+    18)
         uname -a
         #rpi-update
         #secs=$((5))
@@ -252,13 +272,13 @@ case $tool in
         #done
         #reboot
         ;;
-    18)
+    19)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head
         ;;
-    19)
+    20)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head
         ;;
-    20)
+    21)
         read -e -p 'Please enter the folder that you want to estimate usage of>' estimate_folder
         if [[ -z $estimate_folder ]]; then
             echo 'You must type the folder path !'
@@ -267,7 +287,7 @@ case $tool in
             du -sch $count_estimate_folder
         fi
         ;;
-    21 | 'q')
+    22 | 'q')
         echo 'Exited'
         ;;
     *)
