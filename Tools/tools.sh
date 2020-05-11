@@ -24,7 +24,7 @@ if [[ ! -n $tool ]]; then
     echo '15) Set TCP-BBR'
     echo '16) Update Packages'
     echo '17) Install Packages'
-    echo '18) Check RPi kernal version'
+    echo '18) Check Kernal version'
     echo '19) Resource Monitor (Sort By CPU)'
     echo '20) Resource Monitor (Sort By Memory)'
     echo '21) Estimate Usage Of Folder'
