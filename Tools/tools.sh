@@ -1,5 +1,23 @@
 #!/usr/bin/env bash
 
+#=================================================
+#   System Required: Raspbian
+#   Description: Regular Command For Raspberry Pi
+#   Author: carry0987
+#   Web: https://github.com/carry0987
+#=================================================
+
+#Set variable
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+plain='\033[0m'
+cur_dir=$(pwd)
+#Set font prefix
+Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
+Info="[${green}Info${plain}]"
+Error="[${red}Error${plain}]"
+
 set -e
 
 if [[ -n $1 && $1 =~ ^[0-9]+$ ]]; then
@@ -200,33 +218,32 @@ case $tool in
         done
         ;;
     15)
-        #Check if TCP-BBR has already setup
-        if [ `grep -c "net.core.default_qdisc=fq" /etc/sysctl.conf` -eq '1' ]; then
-            bbr_qdisc=1
+        check_bbr_status() {
+            local param=$(sudo sysctl net.ipv4.tcp_congestion_control | awk '{print $3}')
+            if [[ x"${param}" == x"bbr" ]]; then
+                return 0
+            else
+                return 1
+            fi
+        }
+        check_bbr_status
+        if [ $? -eq 0 ]; then
+            echo
+            echo -e "[${green}Info${plain}] TCP BBR has already been installed"
+            exit 0
         else
-            bash -c 'echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf'
+            sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
+            sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
+            echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
             echo 'Successful setting net core'
-            bbr_qdisc=2
-        fi
-
-        if [ `grep -c "net.ipv4.tcp_congestion_control=bbr" /etc/sysctl.conf` -eq '1' ]; then
-            bbr_tcc=1
-        else
-            bash -c 'echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf'
+            echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
             echo 'Successful setting tcp congestion control'
-            bbr_tcc=2
-        fi
-
-        if [[ $bbr_qdisc -eq '1' && $bbr_tcc -eq '1' ]]; then
-            echo 'TCP-BBR has already setup !'
-        elif [[ $bbr_qdisc -eq '2' || $bbr_tcc -eq '2' ]]; then
             echo '######################'
-            echo 'TCP-BBR'
+            echo 'TCP-BBR Status'
             echo '######################'
             sysctl -p
             sysctl net.ipv4.tcp_available_congestion_control
-        else
-            echo 'Failed to set up TCP-BBR'
+            echo '######################'
         fi
         ;;
     16)
