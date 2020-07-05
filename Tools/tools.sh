@@ -82,7 +82,7 @@ case $tool in
         ;;
     3)
         read -e -p 'Enter your path>' count_path
-        find $count_path -type f |wc -l
+        find $count_path -type f | wc -l
         ;;
     4)
         read -e -p 'Enter file or folder that you want to remove>' file_or_folder
