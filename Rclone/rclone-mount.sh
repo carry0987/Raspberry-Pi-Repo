@@ -36,7 +36,7 @@ fi
 
 #Make rclone auto mount at boot
 #sed -i 's/#user_allow_other/user_allow_other/g' /etc/fuse.conf
-wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Rclone-Mount/rclone.service
+wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Rclone/rclone.service
 mv -v rclone.service /etc/systemd/system
 sed '7 aExecStart=/usr/bin/rclone mount '${rclone}':'${remote_path}' '${mount}' --allow-non-empty --vfs-cache-mode writes' -i /etc/systemd/system/rclone.service
 chmod 660 /etc/systemd/system/rclone.service

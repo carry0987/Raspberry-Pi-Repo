@@ -11,7 +11,7 @@ The repository for Raspberry Pi
         <li><a href="#auto-wifi-reconnect">Auto WiFi Reconnect</a></li>
         <li><a href="#deluge-set">Deluge-Set</a></li>
         <li><a href="#hath">HatH</a></li>
-        <li><a href="#rclone-mount">Rclone Mount</a></li>
+        <li><a href="#rclone-tools">Rclone Tools</a></li>
         <li><a href="#tools">Tools</a></li>
     </ul>
 </details>
@@ -34,7 +34,7 @@ receiver = ["Receiver@gmail.com"]
 
 ## Auto WiFi Reconnect
 This script can auto reconnect WiFi when the WiFi down
-1. Use wget to download the script
+1. Use `wget` to download the script
 ```
 sudo wget -P /usr/local/bin https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Auto-WiFi-Reconnect/wifi-reconnect.sh
 ```
@@ -49,7 +49,7 @@ sudo echo '* * * * * root /usr/local/bin/wifi-reconnect.sh' >> /etc/crontab
 
 ## Deluge-Set
 This script can setup Deluge & Deluge-Web
-1. Use wget to download the script
+1. Use `wget` to download the script
 ```
 sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Deluge-Set/deluge-setup.sh
 ```
@@ -60,7 +60,7 @@ sudo sh deluge-setup.sh
 
 ## HatH
 This script can setup HentaiAtHome in the background automatically
-1. Use wget to download the script
+1. Use `wget` to download the script
 ```
 sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/HatH/hath.sh
 ```
@@ -69,23 +69,35 @@ sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/HatH/hath.sh
 sudo sh hath.sh
 ```
 
-## Rclone Mount
+## Rclone Tools
+### Rclone Common Tool
+This script include some common function of Rclone
+1. Use `wget` to download the script
+```
+sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Rclone/rclone-tool.sh
+```
+2. Use `bash` to run it
+```
+sudo bash rclone-tool.sh
+```
+
+### Rclone Mount
 This script can mount remote drive (recommend Google Drive) and make it auto mount at boot
-1. Use wget to download the script
+1. Use `wget` to download the script
 ```
-sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Rclone-Mount/rclone-mount.sh
+sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Rclone/rclone-mount.sh
 ```
-2. Use bash to run it
+2. Use `bash` to run it
 ```
 sudo bash rclone-mount.sh
 ```
 
 If you want to remove rclone-mount
-1. Use wget to download the script
+1. Use `wget` to download the script
 ```
 sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Rclone-Mount/delete-rclone-mount.sh
 ```
-2. Use bash to run it
+2. Use `bash` to run it
 ```
 sudo bash delete-rclone-mount.sh
 ```
@@ -116,11 +128,11 @@ This script has these features
 21. Exit
 ```
 
-1. Use wget to download the script
+1. Use `wget` to download the script
 ```
 sudo wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/Tools/tools.sh
 ```
-2. Use bash to run it
+2. Use `bash` to run it
 ```
 sudo bash tools.sh
 ```
