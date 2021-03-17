@@ -30,23 +30,16 @@ if [[ ! -n $tool ]]; then
     echo '3) Count Files'
     echo '4) Delete File Or Folder'
     echo '5) Check Crontab status'
-    echo '6) Rclone copy files'
-    echo '7) Rclone move files'
-    echo '8) Rclone delete files'
-    echo '9) Rclone upload type files'
-    echo '10) Rclone sync remotes'
-    echo '11) Rclone list remotes'
-    echo '12) Rclone config file location'
-    echo '13) Get CPU Temperature'
-    echo '14) Get Pi Voltage'
-    echo '15) Set TCP-BBR'
-    echo '16) Update Packages'
-    echo '17) Install Packages'
-    echo '18) Check Kernal version'
-    echo '19) Resource Monitor (Sort By CPU)'
-    echo '20) Resource Monitor (Sort By Memory)'
-    echo '21) Estimate Usage Of Folder'
-    echo '22) Exit'
+    echo '6) Get CPU Temperature'
+    echo '7) Get Pi Voltage'
+    echo '8) Set TCP-BBR'
+    echo '9) Update Packages'
+    echo '10) Install Packages'
+    echo '11) Check Kernal version'
+    echo '12) Resource Monitor (Sort By CPU)'
+    echo '13) Resource Monitor (Sort By Memory)'
+    echo '14) Estimate Usage Of Folder'
+    echo '15) Exit'
     read -p 'Which tool do you want to use ? ' tool
 fi
 
@@ -99,125 +92,14 @@ case $tool in
         /etc/init.d/cron status
         ;;
     6)
-        read -e -p 'Please enter the file or directory which you want to copy>' upload_file
-        read -e -p 'Please enter the target that you want to save>' upload_path
-        prefix_file=${upload_file//\'/\'\"\'\"\'}
-        prefix_path=${upload_path//\'/\'\"\'\"\'}
-        check_user=$USER
-        if [ $check_user == 'root' ]; then
-            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
-            su $select_user -c  "rclone copy -v --stats 1s '$prefix_file' '$prefix_path'"
-        else
-            su $USER -c "rclone copy -v --stats 1s '$prefix_file' '$prefix_path'"
-        fi
-        ;;
-    7)
-        read -p 'Please enter the name of remote>' rclone_name
-        read -p 'Please enter the file or directory which you want to move from> '$rclone_name':/' move_from
-        read -p 'Please enter the path that you want to move to> '$rclone_name':/' move_to
-        prefix_from=${move_from//\'/\'\"\'\"\'}
-        prefix_to=${move_to//\'/\'\"\'\"\'}
-        move_to_path=`basename $prefix_from`
-        check_user=$USER
-        if [ $check_user == 'root' ]; then
-            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
-            su $select_user -c "rclone move -v --stats 1s '$rclone_name:/$prefix_from' '$rclone_name:/$prefix_to/$move_to_path'"
-        else
-            su $USER -c "rclone move -v --stats 1s '$rclone_name:/$prefix_from' '$rclone_name:/$prefix_to/$move_to_path'"
-        fi
-        ;;
-    8)
-        read -p 'Please enter the file or directory which you want to delete>' delete_file_or_dir
-        prefix_delete=${delete_file_or_dir//\'/\'\"\'\"\'}
-        check_user=$USER
-        if [ $check_user == 'root' ]; then
-            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
-            su $select_user -c "rclone delete -v --stats 1s '$prefix_delete'"
-        else
-            su $USER -c "rclone delete -v --stats 1s '$prefix_delete'"
-        fi
-        ;;
-    9)
-        script_path="$(cd "$(dirname "$0")"; pwd -P)"
-        read -e -p 'Please enter the path that you want to upload, or leave blank if you want to save in '$script_path'>' type_path
-        if [ -z $type_path ]; then
-            file_path=${script_path%/}
-        else
-            file_path=${type_path%/}
-            #file_space_path=${file_path// /\\ }
-        fi
-        read -p 'Please enter the type of files that you want to upload>'$file_path'/' file_type
-        mkdir -p $file_path'/''EHT_'$file_type
-        mv $file_path'/'*.$file_type $file_path'/''EHT_'$file_type
-        read -p 'Do you want to upload all '$file_path'/'$file_type' files to remote drive? [Y/N] ' remote
-        if [[ $remote =~ ^([Yy])+$ ]]; then
-            read -p 'Please enter the remote path that you want to save>' upload_path
-            prefix_path=${upload_path//\'/\'\"\'\"\'}
-            check_user=$USER
-            if [ $check_user == 'root' ]; then
-                read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
-                su $select_user -c  "rclone copy -v --stats 1s $file_path/EHT_$file_type '$prefix_path'"
-            else
-                su $USER -c "rclone copy -v --stats 1s $file_path/EHT_$file_type '$prefix_path'"
-            fi
-            echo 'Upload Finished !'
-            read -p 'Do you want to remove '$file_path'/'$file_type' files from local? [Y/N] ' remove_dir
-            if [[ $remove_dir =~ ^([Yy])+$ ]]; then
-                rm -vRf $file_path'/''EHT_'$file_type
-            elif [[ $remove_dir =~ ^([Nn])+$ ]]; then
-                exit 0
-            else
-                echo 'You can only choose yes or no'
-            fi
-        elif [[ $remote =~ ^([Nn])+$ ]]; then
-            exit 0
-        else
-            echo 'You can only choose yes or no'
-        fi
-        ;;
-    10)
-        read -e -p 'Please enter the remote which you want to sync>' sync_from
-        read -e -p 'Please enter the target remote that you want to sync with '$sync_from'>' sync_to
-        prefix_sync_from=${sync_from//\'/\'\"\'\"\'}
-        prefix_sync_to=${sync_to//\'/\'\"\'\"\'}
-        check_user=$USER
-        if [ $check_user == 'root' ]; then
-            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
-            su $select_user -c  "rclone sync -v --stats 1s '$prefix_sync_from' '$prefix_sync_to'"
-        else
-            su $USER -c "rclone sync -v --stats 1s '$prefix_sync_from' '$prefix_sync_to'"
-        fi
-        ;;
-    11)
-        read -e -p 'Please enter the remote name which you want to list>' remote_list
-        read -e -p 'Please enter the level that you want rclone descend directories deep>' list_level
-        prefix_remote_list=${remote_list//\'/\'\"\'\"\'}
-        check_user=$USER
-        if [ $check_user == 'root' ]; then
-            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
-            su $select_user -c  "rclone tree -v --human --level $list_level $prefix_remote_list"
-        else
-            su $USER -c "rclone tree -v --human --level $list_level $prefix_remote_list"
-        fi
-        ;;
-    12)
-        check_user=$USER
-        if [ $check_user == 'root' ]; then
-            read -p 'The current user is Root now, please enter your rclone user or leave blank if you want to run rclone under Root>' select_user
-            su $select_user -c  "rclone -h | grep 'Config file'"
-        else
-            su $USER -c "rclone -h | grep 'Config file'"
-        fi
-        ;;
-    13)
         vcgencmd measure_temp
         ;;
-    14)
+    7)
         for id in core sdram_c sdram_i sdram_p ; do \
             echo -e "$id:\t$(vcgencmd measure_volts $id)" ; \
         done
         ;;
-    15)
+    8)
         check_bbr_status() {
             local param=$(sudo sysctl net.ipv4.tcp_congestion_control | awk '{print $3}')
             if [[ x"${param}" == x"bbr" ]]; then
@@ -246,7 +128,7 @@ case $tool in
             echo '######################'
         fi
         ;;
-    16)
+    9)
         check_user=$USER
         if [ $check_user == 'root' ]; then
             apt-get update
@@ -258,7 +140,7 @@ case $tool in
             sudo apt-get clean
         fi
         ;;
-    17)
+    10)
         read -p 'Please enter the packages name that you want to install>' pkg_name
         if [ -z $pkg_name ]; then
             echo 'The package name is empty !'
@@ -277,7 +159,7 @@ case $tool in
             sudo apt-get install $pkg_name
         fi
         ;;
-    18)
+    11)
         uname -a
         #rpi-update
         #secs=$((5))
@@ -289,13 +171,13 @@ case $tool in
         #done
         #reboot
         ;;
-    19)
+    12)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head
         ;;
-    20)
+    13)
         ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head
         ;;
-    21)
+    14)
         read -e -p 'Please enter the folder that you want to estimate usage of>' estimate_folder
         if [[ -z $estimate_folder ]]; then
             echo 'You must type the folder path !'
@@ -304,7 +186,7 @@ case $tool in
             du -sch $count_estimate_folder
         fi
         ;;
-    22 | 'q')
+    15 | 'q')
         echo 'Exited'
         ;;
     *)
