@@ -25,8 +25,8 @@ else
     cd $start_set_up
     sudo chmod 777 $start_set_up
 fi
-sudo wget https://repo.e-hentai.org/hath/HentaiAtHome_1.6.0.zip
-sudo unzip HentaiAtHome_1.6.0.zip
+sudo wget https://repo.e-hentai.org/hath/HentaiAtHome_1.6.2.zip
+sudo unzip HentaiAtHome_1.6.2.zip
 wget https://raw.github.com/carry0987/Raspberry-Pi-Repo/master/HatH/client.sh
 su pi -c 'screen -d -m -S HatH bash -c "client.sh;exec bash"'
 #su pi -c 'screen -S HatH -dm bash -c "rclone --version; exec bash -i"'
